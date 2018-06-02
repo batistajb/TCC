@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Degree;
 use App\Models\Responsible;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -27,7 +28,8 @@ class StudentsController extends Controller
      */
     public function create()
     {
-	    return view('admin.users.students.create');
+    	$degrees = Degree::all('id','year');
+	    return view('admin.users.students.create',compact('degrees'));
     }
 
     /**
@@ -52,7 +54,8 @@ class StudentsController extends Controller
     public function edit($id)
     {
 	    $students = Student::findOrFail($id);
-	    return view('admin.users.students.edit', compact('students'));
+	    $degrees = Degree::all('id','year');
+	    return view('admin.users.students.edit', compact('students','degrees'));
     }
 
     /**

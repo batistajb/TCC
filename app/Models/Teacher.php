@@ -12,6 +12,6 @@ class Teacher extends Model
 	];
 
 	public function team(){
-		return $this->belongsTo(Team::class);
+		return $this->hasMany(Team::class);
 	}
 }

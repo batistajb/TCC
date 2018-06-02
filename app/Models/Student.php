@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     protected $fillable = [
-    	'name','color','birth','nationality','naturalness','sex','uf','certificate_number','certificate_leaf','certificate_register','certificate_expedition','name_mother','name_father','nis','serie'
+    	'name','color','birth','nationality',
+	    'naturalness','sex','uf','certificate_number',
+	    'certificate_leaf','certificate_register','certificate_expedition',
+	    'name_mother','name_father','nis','serie','degree_id'
     ];
 
     public function responsible(){
@@ -22,7 +25,9 @@ class Student extends Model
 	    $dataResp = $request->all(
 		    'tel','cel','street','state','city','number','district','responsible','kinship','divulgation');
 	    $dataStudent = $request->all(
-		    'name','color','birth','nationality','naturalness','sex','uf','certificate_number','certificate_leaf','certificate_register','certificate_expedition','name_mother','name_father','nis','serie');
+		    'name','color','birth','nationality','naturalness','sex',
+		    'uf','certificate_number','certificate_leaf','certificate_register',
+		    'certificate_expedition','name_mother','name_father','nis','serie','degree_id');
 
 	    $responsible = Responsible::create($dataResp);
 	    $responsible_id = $responsible->id;

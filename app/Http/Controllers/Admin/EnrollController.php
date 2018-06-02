@@ -28,7 +28,7 @@ class EnrollController extends Controller {
 		$student         = Student::findOrFail( $request->category_id );
 		$student->enroll = 5;
 		$student->save();
-		return  redirect()->route('enroll.index')->with( 'status', 'Matrícula na lista de espera!' );
+		return  redirect()->route('enrolment')->with( 'status', 'Matrícula na lista de espera!' );
 	}
 
 	public function enroll(Request $request) {

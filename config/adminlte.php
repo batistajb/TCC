@@ -138,7 +138,6 @@ return [
         ],
         [
             'text'        => 'Enturmação',
-            'url'         => 'admin/enturm',
             'icon'        => 'fas ion-ios-people',
             'submenu'     =>[
 	            [
@@ -148,7 +147,7 @@ return [
 	            ],
 	            [
 		            'text'      =>'Listagem',
-		            'url'         => 'admin/teams/show',
+		            'url'         => 'admin/enturm.list',
 		            'icon'        => 'fas ion-ios-people',
 	            ],
 	            [

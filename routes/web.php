@@ -11,15 +11,15 @@ Route::prefix('admin')->group(function (){
 	],function (){
 		Route::get('dashboard','AdminController@index')->name('dashboard');
 
-		Route::get('test/{serie}','EnturmController@degreeTeam')->name('test');//ajax
+		Route::get('ajax-degree/{serie}','EnturmController@degree')->name('test');//ajax
+		Route::get('ajax-team/{serie}','EnturmController@Team')->name('test');//ajax
 
 
 
 		/*Gerenciamneto da enturmação*/
-
 		Route::resource('enturm','EnturmController');
-
-
+		Route::post('enturm.search','EnturmController@search')->name('enturm.search');
+		Route::get('enturm.list','EnturmController@list')->name('enturm.list');
 
 
 		/*Gerenciamento das Matrícula*/

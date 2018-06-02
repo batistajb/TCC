@@ -32,7 +32,6 @@
                             <thead>
                             <tr>
                                 <th>Aluno(a)</th>
-                                <th>Responsável</th>
                                 <th>Idade</th>
                                 <th>Ano/Série</th>
                                 <th>Ações</th>

@@ -14,11 +14,21 @@ class StudentTeam extends Model
     	return $this->hasMany(Student::class,'id','student_id');
     }
 
-    public function teams(){
+    public function team(){
 	    return $this->hasMany(Team::class,'id','team_id');
     }
 
     public function degrees(){
 	    return $this->hasMany(Degree::class,'id','degree_id');
     }
+
+    static function inserting($data){
+
+
+
+	    $data;
+
+
+    }
+
 }

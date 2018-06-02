@@ -56,18 +56,18 @@
                                 <tr>
 
                                     @if($student->enroll==1){{--controle da lista de espera--}}
-                                    <td>{{$student->name}}</td>
-                                    <td>{{$student->responsible['name_responsible']}}</td>
-                                    <td>{{$student->birth}}</td>
-                                    <td>{{$student->serie}}º ano</td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                data-target="#delete" data-whatever="{{$student->id}}">
-                                            <i class="ion-close-circled"></i> Lista de espera
-                                        </button>
-                                        <a href="enroll/{{$student->id}}/edit" class="btn btn-success">
-                                            <i class="ion-android-checkbox-outline"></i>Confirmar</a>
-                                    </td>
+                                        <td>{{$student->name}}</td>
+                                        <td>{{$student->responsible['name_responsible']}}</td>
+                                        <td>{{$student->birth}}</td>
+                                        <td>{{$student->serie}}º ano</td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#delete" data-whatever="{{$student->id}}">
+                                                <i class="ion-close-circled"></i> Lista de espera
+                                            </button>
+                                            <a href="enroll/{{$student->id}}/edit" class="btn btn-success">
+                                                <i class="ion-android-checkbox-outline"></i>Confirmar</a>
+                                        </td>
                                     @endif
                                 </tr>
                             @endforeach

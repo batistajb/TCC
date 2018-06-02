@@ -46,7 +46,7 @@
                                     <th>Série</th>
                                     <th>Nome</th>
                                     <th>Professor</th>
-                                    <th>Qtd alunos</th>
+                                    <th>Qtd máx. de alunos</th>
                                     <th>Turmo</th>
                                     <th>Ação</th>
                                 </tr>
@@ -56,7 +56,7 @@
                                 <tr>
                                     <td>{{$team->serie}} ºano</td>
                                     <td>{{$team->name}}</td>
-                                    <td>{{$team->teacher_id}}</td>
+                                    <td>{{$team->teacher->name}}</td>
                                     <td>{{$team->qtd_students}} Alunos</td>
                                     <td>{{$team->shift}}</td>
                                     <td>

@@ -12,7 +12,12 @@
             '5' => '5º Ano'], null, ['placeholder' => 'Série de interesse','class'=>'form-control']); !!}
         </div>
         <div class="form-group col-md-4">
-            {!! Form::number('year',null,['class'=>'form-control','placeholder'=>'Ano recorrente:']) !!}
+            <select class="select-degree form-control" name="degree_id">
+                    <option></option>
+                @foreach($degrees as $degree)
+                    <option value="{{$degree->id}}">{{$degree->year}}</option>
+                @endforeach
+            </select>
         </div>
     </div>
     <div class="form-group col-md-6">
