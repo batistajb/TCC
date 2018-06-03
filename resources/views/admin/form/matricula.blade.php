@@ -12,12 +12,7 @@
             '5' => '5º Ano'], null, ['placeholder' => 'Série de interesse','class'=>'form-control']); !!}
         </div>
         <div class="form-group col-md-4">
-            <select class="select-degree form-control" name="degree_id">
-                    <option></option>
-                @foreach($degrees as $degree)
-                    <option value="{{$degree->id}}">{{$degree->year}}</option>
-                @endforeach
-            </select>
+            <select class="select-degree form-control" name="degree_id"></select>
         </div>
     </div>
     <div class="form-group col-md-6">

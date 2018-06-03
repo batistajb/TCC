@@ -72,7 +72,7 @@
                                 @endforeach
                                 </tbody>
                             </table>
-
+                            {{$subjects->links()}}
                         </div>
                     </div>
                 </div>
@@ -109,7 +109,7 @@
 
     @if (session('status'))
         <script>
-            confirm("{{session('status')}}");
+            confirm("{{session('status')}}")
         </script>
     @endif
 

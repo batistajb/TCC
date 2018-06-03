@@ -13,11 +13,13 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\User::class, function (Faker $faker) {
+$factory->define(App\Models\Team::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'remember_token' => str_random(10),
+        'name'                      => $faker->name,
+        'teacher_id'                => rand(1,50),
+        'qtd_students'              => rand(20,32),
+        'shift'                     => $faker->sentence,
+        'serie'                     => rand(1,5),
+        'year'                      => rand(2016,2020),
     ];
 });

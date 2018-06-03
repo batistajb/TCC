@@ -7,10 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     protected $fillable = [
-    	'name','color','birth','nationality',
-	    'naturalness','sex','uf','certificate_number',
-	    'certificate_leaf','certificate_register','certificate_expedition',
-	    'name_mother','name_father','nis','serie','degree_id'
+    	'name',
+    	'color',
+    	'birth',
+    	'nationality',
+	    'naturalness',
+	    'sex',
+	    'uf',
+	    'certificate_number',
+	    'certificate_leaf',
+	    'certificate_register',
+	    'certificate_expedition',
+	    'name_mother',
+	    'name_father',
+	    'nis',
+	    'serie',
+	    'degree_id',
+	    'enroll',
+	    'responsible_id'
     ];
 
     public function responsible(){

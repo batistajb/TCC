@@ -13,11 +13,25 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\User::class, function (Faker $faker) {
+$factory->define(App\Models\Student::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'remember_token' => str_random(10),
+        'name'                              => $faker->name,
+        'color'                             => $faker->colorName,
+        'birth'                             => $faker->date('Y-m-d'),
+        'nationality'                       => $faker->country,
+	    'naturalness'                       => $faker->city,
+	    'sex'                               => $faker->boolean,
+	    'uf'                                => $faker->citySuffix,
+	    'certificate_number'                => rand(100,500),
+	    'certificate_leaf'                  => rand(100,500),
+	    'certificate_register'              => $faker->name,
+	    'certificate_expedition'            => $faker->date('Y-m-d'),
+	    'name_mother'                       => $faker->firstNameFemale,
+	    'name_father'                       => $faker->firstNameMale,
+	    'nis'                               => rand(1000000000,9999999999),
+	    'serie'                             => rand(1,5),
+	    'degree_id'                         => rand(1,10),
+	    'enroll'                            => rand(0,4),
+	    'responsible_id'                    => rand(1,50),
     ];
 });

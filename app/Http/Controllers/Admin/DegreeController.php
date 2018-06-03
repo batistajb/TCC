@@ -37,6 +37,7 @@ class DegreeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -51,9 +52,9 @@ class DegreeController extends Controller
 
 	    if($validation->fails()){
 		    return redirect()
-			    ->back()
-			    ->withErrors($validation->errors())
-			    ->withInput($request->all());
+						    ->back()
+						    ->withErrors($validation->errors())
+						    ->withInput($request->all());
 	    }
 
 	    $subjects_id = $request->subject_id;

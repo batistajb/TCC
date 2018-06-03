@@ -16,7 +16,7 @@ use Faker\Generator as Faker;
 $factory->define(App\Models\Subject::class, function (Faker $faker) {
     return [
         'name' => $faker->firstNameFemale,
-        'c_h' => $faker->numberBetween(30,100),
-        'serie' => str_random(5),
+        'c_h' => $faker->randomNumber(2),
+        'serie' =>  rand(1,5)
     ];
 });

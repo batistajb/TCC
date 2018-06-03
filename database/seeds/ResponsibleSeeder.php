@@ -11,6 +11,6 @@ class ResponsibleSeeder extends Seeder
      */
     public function run()
     {
-        //
+       factory(App\Models\Responsible::class,200)->create();
     }
 }
