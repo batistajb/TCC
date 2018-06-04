@@ -57,7 +57,6 @@
                              @endforeach
                         @endforeach
                                 </tbody>
-                                {{$student_teams->links()}}
                             </table>
                         </div>
                     </div>

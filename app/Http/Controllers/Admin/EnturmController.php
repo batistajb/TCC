@@ -50,33 +50,39 @@ class EnturmController extends Controller{
 		$students       = Student::all()
 		                   ->where('serie',     '=',    $serie)
 		                   ->where('degree_id', '=',    $degree_id)
-		                   ->where('enroll',    '=',2 );
+		                   ->where('enroll',    '=',    2 );
 
-		foreach ( $students as $student ){
+		$students_count       = Student::all()
+		                         ->where('serie',     '=',    $serie)
+		                         ->where('degree_id', '=',    $degree_id)
+		                         ->where('enroll',    '=',    2 )->count();
 
-			$students_cont = DB::table( 'student_teams' )
-		                   ->where( 'team_id','=', $team_id)
-		                   ->count();
-
-			if ($team->qtd_students > $students_cont){
-				if($student->enroll == 2){
-					$studentTeam_id        = StudentTeam::create( [ 'team_id' => $team_id  ] );     //cria um registro com a id da turma
-					StudentTeam::findOrFail( $studentTeam_id->id );                                 //recuperar o registro criado
-					$studentTeam_id->update( [ 'student_id' => $student->id ] );                     //vincula o estudante com o registro
-					$studentTeam_id->update( [ 'degree_id' => $degree_id ] );                      //vincula a grade com o registro
-					$studentTeam_id->update( [ 'serie' => $serie ] );
-					Student::up( $student->id );                                                //Atlz controle da matrícula
-
+		if($students_count > 0){
+			foreach ( $students as $student ){
+				$students_cont = DB::table( 'student_teams' )
+				                   ->where( 'team_id','=', $team_id)
+				                   ->count();
+				if ($team->qtd_students > $students_cont){
+					if($student->enroll == 2){
+						$studentTeam_id        = StudentTeam::create( [ 'team_id' => $team_id  ] );     //cria um registro com a id da turma
+						StudentTeam::findOrFail( $studentTeam_id->id );                                 //recuperar o registro criado
+						$studentTeam_id->update( [ 'student_id' => $student->id ] );                     //vincula o estudante com o registro
+						$studentTeam_id->update( [ 'degree_id' => $degree_id ] );                      //vincula a grade com o registro
+						$studentTeam_id->update( [ 'serie' => $serie ] );
+						Student::up( $student->id );                                                //Atlz controle da matrícula
+						$studentTeam_id->update( [ 'qtd' => $students_cont ] );
+					}
+				}else{
+					return redirect()->route('enturm.index',compact('layout'))
+					                 ->with('status','Limite de alunos por turma excedido! Selecione uma nova turma');
 				}
-			}else{
-				return redirect()->route('enturm.index',compact('layout'))
-				                 ->with('status','FALHA. Limite de alunos por turma excedido!');
 			}
-
+			return redirect()->route('enturm.index',compact('layout'))
+			                 ->with('status','Enturmação concluída!');
+		}else{
+			return redirect()->route('enturm.index',compact('layout'))
+			                 ->with('status','Não existe alunos para enturmar!');
 		}
-		return redirect()->route('enturm.index',compact('layout'))
-		                 ->with('status','Enturmação concluída!');
-
 	}
 
 	/**
@@ -95,7 +101,7 @@ class EnturmController extends Controller{
 	}
 
 	public function show() {
-		$student_teams = StudentTeam::paginate(20);
+		$student_teams = StudentTeam::all();
 		return view('admin.enturm.enturm',compact('student_teams'));
 	}
 
@@ -133,7 +139,8 @@ class EnturmController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy( Request $request ) {
+	public function destroy( Request $request ) {/*usado para pesquisar as turmas e retornar os alunos que estão aptos para serem esnturmados*/
+		/*return $request;*/
 		$team_id                = $request->team_id;
 		$degree_id              = $request->degree_id;
 		$serie                  = $request->serie;
@@ -148,7 +155,7 @@ class EnturmController extends Controller{
 				                    ->where('degree_id', '=', $degree_id)
 									->where('enroll', '=',2 );
 
-		$student_teams = StudentTeam::all();
+		$student_teams = StudentTeam::paginate(10);
 
 		return view('admin.enturm.index',
 				compact('team','students','degree','layout','student_teams'));
@@ -160,11 +167,11 @@ class EnturmController extends Controller{
 		$degrees                = Degree::all();
 
 		return view( 'admin.enturm.enturm',
-				compact( 'teams', 'degrees','student_teams','students' ) );
+				compact( 'teams', 'degrees','student_teams','students') );
 	}
 
 	public function search( Request $request ) {
-		/*return $request;*/
+		return $request;
 		$serie                          = $request->turma;             //série/ano que será enturmada
 		$year                           = $request->year;              //ano(data) da enturmação
 		$team_id                        = $request->team;              //id da turma que será enturmada
@@ -194,7 +201,7 @@ class EnturmController extends Controller{
 											[ 'year', '=', $year ],
 										] )->get();
 
-		$student_teams                  = StudentTeam::paginate(20);
+		$student_teams                  = StudentTeam::all();
 
 		if ( $request->team != null) {                                                  //Direciona para a enturmação
 			if($students_cont > 0) {

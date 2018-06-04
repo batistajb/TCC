@@ -16,6 +16,10 @@ Route::prefix('admin')->group(function (){
 
 
 
+		/*Gerenciamneto das notas e frequencia-diário*/
+		Route::resource('dailies','DailiesController');
+
+
 		/*Gerenciamneto da enturmação*/
 		Route::resource('enturm','EnturmController');
 		Route::post('enturm.search','EnturmController@search')->name('enturm.search');

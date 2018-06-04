@@ -15,4 +15,7 @@ class Subject extends Model
 	public function degrees(){
 		return $this->belongsToMany(Degree::class);
 	}
+    public function daily(){
+    	return $this->belongsTo(Daily::class);
+    }
 }

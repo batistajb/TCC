@@ -16,7 +16,7 @@
     <div class="container-fluid col-md-12">
         <hr/>
         <div class="container-fluid">
-            <a class="btn btn-success" href="{{route('enturm.index')}}">Inserir Nova</a>
+            <a class="btn btn-success" href="{{route('enturm.index')}}">Nova Enturmação</a>
             <div class="box-body table-responsive no-padding">
                 <table id="tInfo" class="table table-hover">
                     <thead>
@@ -35,7 +35,7 @@
                                 <tr>
                                 <td>{{$team->name}}</td>
                                 <td>{{$student_team->serie}}</td>
-                                <td>{{$student_team->qtd}}</td>
+                                <td>{{$team->qtd_students}}</td>
                                 <td>{{$degree->year}}</td>
                                 <td>
                                     <a class="btn btn-primary" href="#">
