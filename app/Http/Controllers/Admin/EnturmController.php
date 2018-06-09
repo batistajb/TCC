@@ -250,13 +250,13 @@ class EnturmController extends Controller{
 
 	/*metódos ajax*/
 	public function team($serie) {
-		$teams                      = DB::table( 'teams' )
+		$teams                      =   DB::table( 'teams' )
 										->where( 'serie', '=', $serie )->get();
 		return \Response::json($teams);
 	}
 
 	public function degree($serie) {
-		$degree                     = DB::table( 'degrees' )
+		$degree                     =   DB::table( 'degrees' )
 										->where( 'series', '=', $serie )->get();
 		return \Response::json($degree);
 	}

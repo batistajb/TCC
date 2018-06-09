@@ -25,7 +25,7 @@
                     <div class="container-fluid col-md-6">
                         <div class="container-fluid">
                             <div class="box-body table-responsive no-padding">
-                                {!! Form::open(array('url'=>'enturm/store')) !!}
+                                {!! Form::open(array('url'=>route('dailies.store'))) !!}
                                 <table id="alunosMatriculados" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
@@ -46,7 +46,7 @@
                                     </tbody>
                                 </table>
                                 <div class="form-group col-md-12">
-                                    <a class="btn btn-success" href="#">Salvar</a>
+                                    <button type="submit" class="btn btn-success" >Salvar</button>
                                     <a class="btn btn-danger" href="{{route('dailies.index')}}">Cancelar</a>
                                 </div>
                                 {!! Form::close() !!}
