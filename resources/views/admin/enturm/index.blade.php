@@ -33,7 +33,7 @@
         </div>
         <div class="container-fluid col-md-12">
             <div class="col-md-3">
-                <h1><button type="submit" class="btn btn-success">ENTURMAR ALUNOS NA TURMA SELECIONADA</button></h1>
+                <h1><button type="submit" class="btn btn-success">ENTURMAR ALUNOS </button></h1>
             </div>
             {{Form::close()}}
             <div class="col-md-3">

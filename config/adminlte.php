@@ -145,16 +145,6 @@ return [
 		            'url'         => 'admin/enturm',
 		            'icon'        => 'fas ion-ios-people',
 	            ],
-	            [
-		            'text'      =>'Listagem',
-		            'url'         => 'admin/enturm.list',
-		            'icon'        => 'fas ion-ios-people',
-	            ],
-	            [
-		            'text'      =>'Detalhes',
-		            'url'       => 'admin/enturm/details',
-		            'icon'      =>'history'
-	            ]
             ],
         ],
         [
@@ -177,22 +167,6 @@ return [
             'text'        => 'Diários',
             'url'         => 'admin/dailies',
             'icon'        => 'fas ion-ios-bookmarks',
-        ],
-        [
-            'text'        => 'Relatórios',
-            'icon'        => 'fas ion-clipboard',
-            'submenu'     =>[
-	            [
-		            'text'      =>'Histórico',
-		            'url'       => 'admin/history',
-
-	            ],
-	            [
-		            'text'      =>'Declaração',
-		            'url'       => 'admin/Declaration',
-
-	            ]
-            ],
         ],
 	    [
 	    'text'        => 'Cadastrar',

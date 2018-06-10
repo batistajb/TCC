@@ -13,20 +13,21 @@ Route::prefix('admin')->group(function (){
 
 		Route::get('ajax-degree/{serie}','EnturmController@degree')->name('test');//ajax
 		Route::get('ajax-team/{serie}','EnturmController@Team')->name('test');//ajax
-		Route::get('ajax-dailies/{id}','DailiesController@dailies')->name('test');//ajax
 
+
+		Route::get('history','AdminController@history')->name('admin.history');
 
 
 		/*Gerenciamneto das notas e frequencia-diário*/
 		Route::resource('dailies','DailiesController');
-		Route::post('search/{request}','DailiesController@search')->name('dailies.search');
-		Route::post('subject/{request}','DailiesController@subject')->name('dailies.subject');
+		Route::post('dailies/{request}','DailiesController@search')->name('dailies.search');
+		Route::post('dailies/subject/{request}','DailiesController@dailies')->name('dailies.subject');
 
 
 		/*Gerenciamneto da enturmação*/
 		Route::resource('enturm','EnturmController');
 		Route::post('enturm.search','EnturmController@search')->name('enturm.search');
-		Route::get('enturm.list','EnturmController@list')->name('enturm.list');
+		/*Route::get('enturm.list','EnturmController@list')->name('enturm.list');*/
 
 
 		/*Gerenciamento das Matrícula*/

@@ -6,6 +6,7 @@
     <title>@yield('title_prefix', config('adminlte.title_prefix', ''))
 @yield('title', config('adminlte.title', 'AdminLTE 2'))
 @yield('title_postfix', config('adminlte.title_postfix', ''))</title>
+
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -43,8 +44,22 @@
 @yield('body')
 
 <script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.min.js') }}"></script>
+
 <script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.slimscroll.min.js') }}"></script>
+
 <script src="{{ asset('vendor/adminlte/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<!-- FastClick -->
+<script src="{{ asset('vendor/adminlte/vendor/bower_components/fastclick/lib/fastclick.js')}}"></script>
+<!-- jQuery Knob -->
+<script src="{{ asset('vendor/adminlte/vendor/bower_components/jquery-knob/js/jquery.knob.js')}}"></script>
+<!-- Sparkline -->
+<script src="{{ asset('vendor/adminlte/vendor/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js')}}"></script>
+<!-- ChartJS -->
+<script src="{{ asset('vendor/adminlte/vendor/bower_components/Chart.js/Chart.js')}}"></script>
+<!-- fullCalendar -->
+<link rel="stylesheet" href="{{ asset('vendor/adminlte/vendor/bower_components/fullcalendar/dist/fullcalendar.min.css')}}">
+<link rel="stylesheet" href="{{ asset('vendor/adminlte/vendor/bower_components/fullcalendar/dist/fullcalendar.print.min.css" media="print')}}">
+<!-- page script -->
 
 @if(config('adminlte.plugins.select2'))
     <!-- Select2 -->

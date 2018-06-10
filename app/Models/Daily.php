@@ -11,7 +11,7 @@ class Daily extends Model
         'student_id',
         'frequency',
         'note',
-        'serie',
+        'coef',
 	];
 
     public function students(){

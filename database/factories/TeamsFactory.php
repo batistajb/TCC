@@ -15,7 +15,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\Team::class, function (Faker $faker) {
     return [
-        'name'                      => $faker->name,
+        'name'                      => $faker->colorName,
         'teacher_id'                => rand(1,50),
         'qtd_students'              => rand(20,32),
         'shift'                     => $faker->sentence,

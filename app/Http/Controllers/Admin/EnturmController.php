@@ -171,7 +171,7 @@ class EnturmController extends Controller{
 	}
 
 	public function search( Request $request ) {
-		return $request;
+		/*return $request;*/
 		$serie                          = $request->turma;             //série/ano que será enturmada
 		$year                           = $request->year;              //ano(data) da enturmação
 		$team_id                        = $request->team;              //id da turma que será enturmada
@@ -239,14 +239,13 @@ class EnturmController extends Controller{
 		}
 	}
 
-	public function list(){
+/*	public function list(){
 		$student_teams          = StudentTeam::paginate(20);
-		/*$students_cont = DB::table( 'student_teams' )
-		                   ->where( 'team_id',        '=',   $team_id)
-		                   ->count();*/
-			return view( 'admin.enturm.show',
-					compact( 'student_teams') );
-	}
+
+		 $student_teams = DB::table( 'student_teams')->orderBy('team_id');
+
+			return view( 'admin.enturm.show', compact( 'student_teams') );
+	}*/
 
 	/*metódos ajax*/
 	public function team($serie) {

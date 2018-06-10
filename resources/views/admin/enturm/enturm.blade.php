@@ -23,7 +23,7 @@
                 <div class="container-fluid col-md-12">
                     <div class="container-fluid">
                         <div class="box-body table-responsive no-padding">
-                            <a class="btn btn-primary" href="{{route('enturm.index')}}">Listagem das enturmação</a>
+                            {{--<a class="btn btn-primary" href="{{route('enturm.index')}}">Listagem das enturmação</a>--}}
                             <table id="infoTurma" class="table table-striped table-bordered">
                                     <h3><a>{{"Grade ". $serie."º ano/".$year}}</a></h3>
                                 <thead>

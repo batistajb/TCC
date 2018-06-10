@@ -62,7 +62,7 @@
                                         <td>{{$student->serie}}º ano</td>
                                         <td>
                                             <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#delete" data-whatever="{{$student->id}}">
+                                                              data-target="#delete" data-whatever="{{$student->id}}">
                                                 <i class="ion-close-circled"></i> Lista de espera
                                             </button>
                                             <a href="enroll/{{$student->id}}/edit" class="btn btn-success">

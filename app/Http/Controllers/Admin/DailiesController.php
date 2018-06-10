@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Daily;
 use App\Models\Degree;
 use App\Models\DegreeSubject;
+use App\Models\Student;
 use App\Models\StudentTeam;
 use App\Models\Subject;
 use App\Models\Team;
@@ -64,7 +65,11 @@ class DailiesController extends Controller
      */
     public function edit($id)
     {
-        //
+    	$student                = Student::findOrFail($id);
+	    $student_teams          = StudentTeam::all()->where('student_id',  '=',$id);
+	    $dailies                = Daily::all();
+
+        return view('admin.daily.edit', compact('student','student_teams','dailies'));
     }
 
     /**
@@ -92,22 +97,24 @@ class DailiesController extends Controller
 
     public function search(Request $request){
 	    /*return $request;*/
-	    $team_id                = $request->team_id;
-	    $degree_id              = $request->degree_id;
-	    $serie                  = $request->serie;
-	    $team                   = Team::findOrFail($team_id);
-	    $degree                 = Degree::findOrFail($degree_id);
-	    $student_teams          = StudentTeam::all()
-	                                          ->where('team_id',  '=',$team_id)
-	                                          ->where('degree_id','=',$degree_id)
-	                                          ->where('serie',    '=',$serie);
-	    $degrees                = Degree::all()->where( 'id',     '=', $degree_id );
-	    $dailies                = Daily::all();
+	    $team_id                        =   $request->team_id;
+	    $degree_id                      =   $request->degree_id;
+	    $serie                          =   $request->serie;
+
+	    $team                           =   Team::findOrFail($team_id);
+	    $degree                         =   Degree::findOrFail($degree_id);
+	    $student_teams                  =   StudentTeam::all()
+				                                          ->where('team_id',  '=',$team_id)
+				                                          ->where('degree_id','=',$degree_id)
+				                                          ->where('serie',    '=',$serie);
+	    $degrees                        =   Degree::all()->where( 'id',       '=', $degree_id );
+	    $dailies                        =   Daily::all();
+
 
 	    return view('admin.daily.show',compact('student_teams','degrees','team','degree','dailies'));
     }
 
-    public function subject(Request $request){
+    public function subject($id){
 
     	$subjects =Subject::all();
 
@@ -115,8 +122,46 @@ class DailiesController extends Controller
     }
 
 
-	public function dailies($id){
-		$dailies                 = Daily::findOrFail($id );
-		return $dailies;
+	public function dailies(Request $request){
+
+    	$student_id                     =   $request->student_id;
+    	$subject_id                     =   $request->subject_id;
+    	$frequency                      =   $request->frequency;
+    	$note                           =   $request->note;
+    	$coef                           =   ($note*$frequency);
+		$coef_note                      =   0;
+		$coef_total                     =   0;
+
+		$student                        =   Student::findOrFail($student_id);
+
+
+		$subjects                       =   Subject::all()
+					                               ->where('id',        '=',$subject_id)
+					                               ->where('serie',     '=',$student->serie);
+
+		$dailies                        =   Daily::all()
+					                               ->where('subject_id','=',$subject_id)
+					                               ->where('student_id','=',$student_id);
+
+		$daily_count                    =   Daily::all()
+					                               ->where('subject_id','=',$subject_id)
+					                               ->where('student_id','=',$student_id)
+					                               ->count();
+
+
+		if($daily_count > 0){
+			foreach ($dailies as $daily){
+				$daily->frequency       =  $frequency;
+				$daily->note            =  $note;
+				$daily->coef            =  $coef;
+				$daily->save();
+			}
+		}else{
+			Daily::create($request->all());
+		}
+
+
+		return redirect()->back()->with('status','Inserido com sucesso!');
 	}
+
 }
