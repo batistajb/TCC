@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'SGA'),
 
     /*
     |--------------------------------------------------------------------------
@@ -151,6 +151,7 @@ return [
 	    Bootstrapper\BootstrapperL5ServiceProvider::class,
 	    JeroenNoten\LaravelAdminLte\ServiceProvider::class,
 	    Collective\Html\HtmlServiceProvider::class,
+	    Fx3costa\LaravelChartJs\Providers\ChartjsServiceProvider::class,
 
         /*
          * Package Service Providers...

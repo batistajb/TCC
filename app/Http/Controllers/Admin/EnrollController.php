@@ -10,17 +10,19 @@ class EnrollController extends Controller {
 
 
 	public function index(){
-		$students   =   Student::paginate(20);
+
+		$students   =   Student::where('enroll', '=', 1)->Paginate(10);
+
 		return view('admin.enroll.index', compact('students'));
 	}
 
 	public function renew(){
-		$students   =   Student::paginate(20);
+		$students   =   Student::where('enroll', '=', 0)->paginate(10);
 		return view('admin.enroll.renew', compact('students'));
 	}
 
 	public function enrolment(){
-		$students   =   Student::paginate(20);
+		$students   =   Student::where('enroll', '=', 5)->paginate(10);
 		return view('admin.enroll.enrolment', compact('students'));
 	}
 

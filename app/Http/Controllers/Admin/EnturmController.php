@@ -9,6 +9,7 @@ use App\Models\Team;
 use DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Response;
 
 class EnturmController extends Controller{
 	/**
@@ -257,7 +258,7 @@ class EnturmController extends Controller{
 	public function degree($serie) {
 		$degree                     =   DB::table( 'degrees' )
 										->where( 'series', '=', $serie )->get();
-		return \Response::json($degree);
+		return Response::json($degree);
 	}
 
 

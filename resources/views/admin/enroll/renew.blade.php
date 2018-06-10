@@ -55,8 +55,6 @@
                             @foreach($students as $student)
 
                                 <tr>
-
-                                    @if($student->enroll==0){{--controle da lista de espera--}}
                                     <td>{{$student->name}}</td>
                                     <td>{{$student->responsible['name_responsible']}}</td>
                                     <td>{{$student->birth}}</td>
@@ -69,7 +67,6 @@
                                         <a href="students/{{$student->id}}/edit" class="btn btn-primary">
                                             <i class="ion-android-checkbox-outline"></i>Rematrícular</a>
                                     </td>
-                                    @endif
                                 </tr>
                             @endforeach
                             </tbody>

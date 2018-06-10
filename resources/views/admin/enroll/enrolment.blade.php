@@ -52,10 +52,7 @@
                             </thead>
                             <tbody>
                             @foreach($students as $student)
-
                                 <tr>
-
-                                    @if($student->enroll==5){{--controle da lista de espera--}}
                                     <td>{{$student->name}}</td>
                                     <td>{{$student->responsible['name_responsible']}}</td>
                                     <td>{{$student->birth}}</td>
@@ -66,7 +63,6 @@
                                         <i class="ion-android-checkbox-outline"></i> Matrícular
                                         </button>
                                     </td>
-                                    @endif
                                 </tr>
                             @endforeach
                             </tbody>

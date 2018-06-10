@@ -122,17 +122,17 @@ return [
 	            [
 		            'text'      =>'Matrícula',
 		            'url'         => 'admin/enroll',
-		            'icon'        => 'fas ion-ios-people',
+		            'icon'        => 'check-square-o',
 	            ],
 	            [
 		            'text'      =>'Rematrícula',
 		            'url'         => 'admin/renew',
-		            'icon'        => 'fas ion-ios-people',
+		            'icon'        => 'copy',
 	            ],
 	            [
 		            'text'      =>'Lista de espera',
 		            'url'         => 'admin/enrolment',
-		            'icon'        => 'fas ion-ios-people',
+		            'icon'        => 'list',
 	            ],
 	       ]
         ],
@@ -149,24 +149,29 @@ return [
         ],
         [
             'text'        => 'Documentos',
-            'icon'        => 'fas ion-ios-box',
+            'icon'        => 'archive',
             'submenu'     =>[
             	[
             		'text'      =>'Histórico',
-		            'url'       => 'admin/history',
+		            'url'       => 'admin/history/create',
 		            'icon'      =>'history'
 	            ],
             	[
             		'text'      =>'Declaração',
 		            'url'       => 'admin/Declaration',
-		            'icon'      =>'history'
+		            'icon'      =>'file'
+	            ],
+            	[
+            		'text'      =>'Arquivo morto',
+		            'url'       => 'admin/old',
+		            'icon'      =>'folder-open'
 	            ]
             ],
         ],
         [
             'text'        => 'Diários',
             'url'         => 'admin/dailies',
-            'icon'        => 'fas ion-ios-bookmarks',
+            'icon'        => 'book',
         ],
 	    [
 	    'text'        => 'Cadastrar',
