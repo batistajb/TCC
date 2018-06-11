@@ -25,13 +25,13 @@
                 <div class="col-md-8">
                     <form method="post" action="{{url('admin/teacher/search')}}" class="form-group">
                         <div class="col-md-4">
-                                {{csrf_field()}}
-                                <select class="select-turmas form-control" name="turma_id">
-                                    <option></option>
-                                    @foreach($teachers as $teacher)
-                                        <option value="{{$teacher->id}}">{{$teacher->name}}</option>
-                                    @endforeach
-                                </select>
+                            {{csrf_field()}}
+                            <select class="select-turmas form-control" name="turma_id">
+                                <option></option>
+                                @foreach($teachers as $teacher)
+                                    <option value="{{$teacher->id}}">{{$teacher->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <button type="submit" class="btn btn-default inline"><i class="fa fa-search"></i></button>
                     </form>
@@ -52,7 +52,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($teachers as $teacher)
+                            @forelse($teachers as $teacher)
                                 <tr>
                                     <td>{{$teacher->name}}</td>
                                     <td>{{$teacher->cpf}}</td>
@@ -66,7 +66,13 @@
                                         </button>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <th>Nenhum registro cadastrado!</th>
+                                <th/>
+                                <th/>
+                                <th/>
+                                <th/>
+                            @endforelse
                             </tbody>
                         </table>
                         {{$teachers->links()}}

@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'title' => 'SGA',
+    'title' => '',
 
     'title_prefix' => 'SGA - ',
 
@@ -30,9 +30,9 @@ return [
     |
     */
 
-    'logo' => '<b>Sistema</b>Alunos',
+    'logo' => '<b>S</b>istema de <b>G</b>estão de <b>A</b>lunos</b>',
 
-    'logo_mini' => '<b>SG</b>A',
+    'logo_mini' => '<b>SGA</b>',
 
     /*
     |--------------------------------------------------------------------------

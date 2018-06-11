@@ -46,7 +46,7 @@
 
                             </thead>
                             <tbody>
-                            @foreach($degrees as $degree)
+                            @forelse($degrees as $degree)
                                 <tr>
                                     <td>{{$degree->year}}</td>
                                     <td>{{$degree->series}} º Ano</td>
@@ -62,7 +62,12 @@
                                         </button>
                                     </td>
                                 </tr>
-                            @endforeach
+                                @empty
+                                    <th>Nenhum registro cadastrado!</th>
+                                    <th/>
+                                    <th/>
+                                    <th/>
+                                @endforelse
                             </tbody>
                         </table>
                         {{$degrees->links()}}

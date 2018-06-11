@@ -10,7 +10,6 @@ class EnrollController extends Controller {
 
 
 	public function index(){
-
 		$students   =   Student::where('enroll', '=', 1)->Paginate(10);
 
 		return view('admin.enroll.index', compact('students'));
@@ -27,6 +26,7 @@ class EnrollController extends Controller {
 	}
 
 	public function destroy(Request $request ) {
+		$this->authorize('view-enrollment');
 		$student            = Student::findOrFail( $request->category_id );
 		$student->enroll    = 5;
 		$student->save();
@@ -36,6 +36,7 @@ class EnrollController extends Controller {
 	}
 
 	public function enroll(Request $request) {
+		$this->authorize('view-enrollment');
 		$student            = Student::findOrFail( $request->category_id );
 		$student->enroll    = 2;
 		$student->save();
@@ -45,6 +46,7 @@ class EnrollController extends Controller {
 	}
 
 	public function edit($id){
+		$this->authorize('view-enrollment');
 		$student            = Student::findOrFail( $id );
 		$student->enroll    = 2;
 		$student->save();
@@ -54,6 +56,7 @@ class EnrollController extends Controller {
 	}
 
 	public function renewEdit($id){
+		$this->authorize('view-enrollment');
 		$student            = Student::findOrFail( $id );
 		$student->enroll    = 2;
 		$student->save();
@@ -63,6 +66,7 @@ class EnrollController extends Controller {
 	}
 
 	public function low(Request $request){
+		$this->authorize('view-enrollment');
 		$student            = Student::findOrFail( $request->category_id );
 		$student->enroll    = 4;
 		$student->save();

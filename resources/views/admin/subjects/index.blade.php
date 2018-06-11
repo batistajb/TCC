@@ -55,7 +55,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($subjects as $subject)
+                                @forelse($subjects as $subject)
                                     <tr>
                                         <td>{{$subject->name}}</td>
                                         <td>{{$subject->c_h}}</td>
@@ -69,7 +69,13 @@
                                             </button>
                                         </td>
                                     </tr>
-                                @endforeach
+                                    @empty
+                                        <th>Nenhum registro cadastrado!</th>
+                                        <th/>
+                                        <th/>
+                                        <th/>
+                                        <th/>
+                                    @endforelse
                                 </tbody>
                             </table>
                             {{$subjects->links()}}

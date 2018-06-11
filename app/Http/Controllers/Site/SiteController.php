@@ -8,6 +8,6 @@ use App\Http\Controllers\Controller;
 class SiteController extends Controller
 {
     public function index(){
-    	return view('admin.home.index');
+    	return view('auth.login');
     }
 }

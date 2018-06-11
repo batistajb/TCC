@@ -17,7 +17,10 @@
             <div class="box-header">
                 <h1 class="box-tile">Listagem de usuários</h1>
                 <div class="col-md-4">
-                    <a class="btn btn-success" href="{{route('users.create')}}">Novo Usuário <i class="ion-person-add"></i></a>
+                    @can('view-enrollment')
+                        <a class="btn btn-success" href="{{route('users.create')}}">Novo Usuário <i
+                                    class="ion-person-add"></i></a>
+                    @endcan
                 </div>
                 <div class="col-md-8">
                     <div class="input-group input-group-sm" style="width: 450px;">
@@ -41,21 +44,31 @@
                                 <th>Email</th>
                                 <th>Ações</th>
                             </tr>
-                            @foreach($users as $user)
+                            @forelse($users as $user)
                                 <tr>
                                     <td>{{$user->id}}</td>
                                     <td>{{$user->name}}</td>
                                     <td>{{$user->email}}</td>
-                                    <td>
-                                        <a href="users/{{$user->id}}/edit" class="btn btn-primary">
-                                            <i class="ion-edit"></i> Editar</a>
-                                        <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                data-target="#delete" data-whatever="{{$user->id}}"><i
-                                                    class="ion-trash-b"></i> Excluir
-                                        </button>
-                                    </td>
+                                    @can('view-enrollment')
+                                        <td>
+                                            <a href="users/{{$user->id}}/edit" class="btn btn-primary">
+                                                <i class="ion-edit"></i> Editar</a>
+                                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#delete" data-whatever="{{$user->id}}"><i
+                                                        class="ion-trash-b"></i> Excluir
+                                            </button>
+                                        </td>
+                                    @else
+                                        <td>Usuário não autorizado</td>
+                                    @endcan
                                 </tr>
-                            @endforeach
+                            @empty
+                                <th>Nenhum registro cadastrado!</th>
+                                <th/>
+                                <th/>
+                                <th/>
+                                <th/>
+                            @endforelse
                             </tbody>
                         </table>
                         {{ $users->links() }}

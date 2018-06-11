@@ -16,16 +16,22 @@ class UsersController extends Controller
 	  }
 
 	  public function create(){
+		  $this->authorize('view-enrollment');
 	  	return view('admin.users.create');
 	  }
 
 	  public function edit($id){
+		  if(\Gate::denies('view-enrollment')){
+			  abort(403,'Não autorizado');
+		  }
+
 		  $users = User::findOrFail($id);
 		  return view('admin.users.edit', compact('users'));
 	  }
 
 	  public function update($id, Request $request){
 
+		  $this->authorize('view-enrollment');
 		  $validation = $this->validation($request->all());
 
 		  if($validation->fails()){
@@ -41,7 +47,7 @@ class UsersController extends Controller
 	  }
 
 	  public function destroy(Request $request){
-
+		  $this->authorize('view-enrollment');
 		  $subject = User::findOrFail($request->category_id);
 		  $subject->delete();
 		  return back()->with('status', 'Registro apagado!');
@@ -49,7 +55,7 @@ class UsersController extends Controller
 
 
 	  public function store(Request $request){
-
+		  $this->authorize('view-enrollment');
 		  $validation = $this->validation($request->all());
 
 		  if($request->password!=$request->pass2){
@@ -100,7 +106,7 @@ class UsersController extends Controller
 	}
 
 	public function editProfile(Request $request){
-
+		$this->authorize('view-enrollment');
 		$user= $request->all();
 
 		$validation = $this->validation($request->all());

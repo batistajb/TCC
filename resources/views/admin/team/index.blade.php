@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-      <div class="row">
+    <div class="row">
         <div class="col-md-12">
             <h1 class="box-tile">Listagem de Turmas</h1>
             <hr/>
@@ -33,84 +33,90 @@
                     </div>
                 </form>
             </div>
-            </div>
         </div>
-        <div class="row">
-            <div class="box-default">
-                <div class="container-fluid col-md-12">
-                    <div class="container-fluid">
-                        <div class="box-body table-responsive no-padding">
-                            <table id="tInfo" class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Série</th>
-                                    <th>Nome</th>
-                                    <th>Professor</th>
-                                    <th>Qtd máx. de alunos</th>
-                                    <th>Turmo</th>
-                                    <th>Ação</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($teams as $team)
-                                <tr>
-                                    <td>{{$team->serie}} ºano</td>
-                                    <td>{{$team->name}}</td>
-                                    <td>{{$team->teacher->name}}</td>
-                                    <td>{{$team->qtd_students}} Alunos</td>
-                                    <td>{{$team->shift}}</td>
-                                    <td>
-                                        <a href="team/{{$team->id}}/edit" class="btn btn-primary">
-                                            <i class="ion-edit"></i> Editar</a>
-                                        <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                data-target="#delete" data-whatever="{{$team->id}}"><i
-                                                    class="ion-trash-b"></i> Excluir
-                                        </button>
-                                    </td>
-                                </tr>
-                                @endforeach
-                                </tbody>
-                                {{$teams->links()}}
-                            </table>
-                        </div>
+    </div>
+    <div class="row">
+        <div class="box-default">
+            <div class="container-fluid col-md-12">
+                <div class="container-fluid">
+                    <div class="box-body table-responsive no-padding">
+                        <table id="tInfo" class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Série</th>
+                                <th>Nome</th>
+                                <th>Professor</th>
+                                <th>Qtd máx. de alunos</th>
+                                <th>Turmo</th>
+                                <th>Ação</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @forelse()$teams as $team)
+                            <tr>
+                                <td>{{$team->serie}} ºano</td>
+                                <td>{{$team->name}}</td>
+                                <td>{{$team->teacher->name}}</td>
+                                <td>{{$team->qtd_students}} Alunos</td>
+                                <td>{{$team->shift}}</td>
+                                <td>
+                                    <a href="team/{{$team->id}}/edit" class="btn btn-primary">
+                                        <i class="ion-edit"></i> Editar</a>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal"
+                                            data-target="#delete" data-whatever="{{$team->id}}"><i
+                                                class="ion-trash-b"></i> Excluir
+                                    </button>
+                                </td>
+                            </tr>
+                            @empty
+                                <th>Nenhum registro cadastrado!</th>
+                                <th/>
+                                <th/>
+                                <th/>
+                                <th/>
+                            @endforelse
+                            </tbody>
+                            {{$teams->links()}}
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
 
-      <div class="modal  fade in" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-           aria-hidden="true">
-          <div class="modal-dialog" role="document">
-              <div class="modal-content ">
-                  <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true"><i class="fas ion-close"></i></span>
-                      </button>
-                  </div>
-                  <div class="modal-body">
-                      <form action="{{route('team.destroy','test')}}" method="post">
-                          {{method_field('DELETE')}}
-                          {{csrf_field()}}
-                          <div class="modal-body">
-                              <h3 class="text-center">Deseja realmente excluir registro?</h3>
-                              <input type="hidden" name="category_id" id="cat_id" value=""/>
-                          </div>
-                          <div class="modal-footer">
-                              <button type="button" class="btn btn-primary" data-dismiss="modal">Não, cancelar</button>
-                              <button type="submit" class="btn btn-danger">Sim,confirmar</button>
-                          </div>
-                      </form>
-                  </div>
-              </div>
-          </div>
-      </div>
+    <div class="modal  fade in" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas ion-close"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('team.destroy','test')}}" method="post">
+                        {{method_field('DELETE')}}
+                        {{csrf_field()}}
+                        <div class="modal-body">
+                            <h3 class="text-center">Deseja realmente excluir registro?</h3>
+                            <input type="hidden" name="category_id" id="cat_id" value=""/>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Não, cancelar</button>
+                            <button type="submit" class="btn btn-danger">Sim,confirmar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-      @if (session('status'))
-          <script>
-              confirm("{{session('status')}}");
-          </script>
-      @endif
+    @if (session('status'))
+        <script>
+            confirm("{{session('status')}}");
+        </script>
+    @endif
 
 
 @stop

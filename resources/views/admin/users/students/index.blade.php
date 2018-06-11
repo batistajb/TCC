@@ -34,7 +34,7 @@
                     <div class="container-fluid">
                         <div class="box-body table-responsive no-padding">
                             <table id="tInfo" class="table table-hover">
-                            <thead>
+                                <thead>
                                 <tr>
                                     <th>Nome</th>
                                     <th>Data de Nascimento</th>
@@ -42,32 +42,38 @@
                                     <th>Série</th>
                                     <th>Ação</th>
                                 </tr>
-                            </thead>
-                            <tbody>
-                           @foreach($students as $student)
-                             <tr>
-                                <td>{{$student->name}}</td>
-                                <td>{{$student->birth}}</td>
-                                <td>{{$student->responsible['name_responsible']}}</td>
-                                <td>{{$student->serie}} ºano</td>
-                                <td>
-                                    <a href="students/{{$student->id}}/edit" class="btn btn-primary">
-                                        <i class="ion-edit"></i> Editar</a>
-                                    <button type="button" class="btn btn-danger" data-toggle="modal"
-                                            data-target="#delete" data-whatever="{{$student->id}}"><i
-                                                class="ion-trash-b"></i> Excluir
-                                    </button>
-                                </td>
-                            </tr>
-                           @endforeach
-                            </tbody>
+                                </thead>
+                                <tbody>
+                                @forelse($students as $student)
+                                    <tr>
+                                        <td>{{$student->name}}</td>
+                                        <td>{{$student->birth}}</td>
+                                        <td>{{$student->responsible['name_responsible']}}</td>
+                                        <td>{{$student->serie}} ºano</td>
+                                        <td>
+                                            <a href="students/{{$student->id}}/edit" class="btn btn-primary">
+                                                <i class="ion-edit"></i> Editar</a>
+                                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#delete" data-whatever="{{$student->id}}"><i
+                                                        class="ion-trash-b"></i> Excluir
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <th>Nenhum registro cadastrado!</th>
+                                    <th/>
+                                    <th/>
+                                    <th/>
+                                    <th/>
+                                @endforelse
+                                </tbody>
                                 {{$students->links()}}
-                        </table>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
     <div class="modal  fade in" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

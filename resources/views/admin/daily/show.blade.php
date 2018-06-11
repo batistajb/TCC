@@ -43,7 +43,7 @@
 
                     </thead>
                     <tbody>
-                    @foreach($student_teams as $student_team)
+                    @forelse($student_teams as $student_team)
                         @foreach($student_team->students as $student)
                             <tr>
                                 <td>{{$student->name}}</td>
@@ -55,7 +55,13 @@
                                 </td>
                             </tr>
                         @endforeach
-                    @endforeach
+                    @empty
+                            <th>Nenhum registro cadastrado!</th>
+                            <th/>
+                            <th/>
+                            <th/>
+                            <th/>
+                    @endforelse
                     </tbody>
                 </table>
             </div>
