@@ -51,6 +51,16 @@
     @endif
 </div>
 
+<div class="form-group col-md-2  {{$errors->has('year') ? 'has-error': ''}}">
+    {!! Form::number('year',null,['class'=>'form-control','placeholder'=>'Ano corrente:']) !!}
+    @if($errors->has('year'))
+        <span class="help-block">
+            {{$errors->first('year')}}
+        </span>
+    @endif
+</div>
+
+
 <div class="form-group col-md-12">
     <hr/>
     <a class="btn btn-danger" href="{{route('team.index')}}">Cancelar</a>

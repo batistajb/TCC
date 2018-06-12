@@ -52,7 +52,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse()$teams as $team)
+                            @forelse($teams as $team)
                             <tr>
                                 <td>{{$team->serie}} ºano</td>
                                 <td>{{$team->name}}</td>
@@ -70,6 +70,7 @@
                             </tr>
                             @empty
                                 <th>Nenhum registro cadastrado!</th>
+                                <th/>
                                 <th/>
                                 <th/>
                                 <th/>

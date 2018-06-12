@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Daily;
 use App\Models\Degree;
 use App\Models\Student;
 use App\Models\StudentTeam;
@@ -26,10 +27,39 @@ class EnturmController extends Controller{
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return Request
+	 * @param Request $request
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function create( ) {
+	public function archive(Request $request) {
+		/*return $request;*/
 
+		$team_id            =  $request->team_id;
+		$team               =   Team::findOrFail($team_id);
+		$dailies            =   Daily::all();
+
+		foreach ($team->studentTeams as $student_team){
+			foreach ($student_team->students as $student){
+				foreach ($dailies as $daily){
+					if($daily->student_id == $student->id){
+						if(($daily->note)&&($daily->frequency)){
+							return back()->with('status','Atenção! Insira as notas e frequencias de todos alunos');
+						}else{
+							return "ok";
+							/*$student_team->qtd--;
+							$student_team->save();
+							$student->enroll    =   0;
+							$student->serie     =   $student->serie+1;
+							$student->save();
+							$team->controll     =   0;
+							$team->save();                                           //arquivando turma
+							$student_team->delete();*/
+						}
+					}
+				}
+			}
+		}
+		return back()->with('status','Registro arquivado com sucesso!');
 	}
 
 	/**
@@ -71,7 +101,7 @@ class EnturmController extends Controller{
 						$studentTeam_id->update( [ 'degree_id' => $degree_id ] );                      //vincula a grade com o registro
 						$studentTeam_id->update( [ 'serie' => $serie ] );
 						Student::up( $student->id );                                                //Atlz controle da matrícula
-						$studentTeam_id->update( [ 'qtd' => $students_cont ] );
+						$studentTeam_id->update( [ 'qtd' => $students_cont + 1 ] );                 //controle da qntidade de alunos da turma
 					}
 				}else{
 					return redirect()->route('enturm.index',compact('layout'))
@@ -211,13 +241,13 @@ class EnturmController extends Controller{
 						foreach ( $students as $student ) {                      //pecorre os estudantes cadastrados
 							$studentTam["student_id"] = $student->id;            //atribuições para savar
 							$studentTam["degree_id"]  = $degree->id;
-							if ( ( $team->id == $team_id ) && ( $student->enroll == 2 ) ) {   //condição para vincular somente a série e aluno ,atriculado
-								Student::up( $student->id );/*atualiza o controle de matriculas*/
+							if ( ( $team->id == $team_id ) && ( $student->enroll == 2 ) ) {                         //condição para vincular somente a série e aluno ,atriculado
+								Student::up( $student->id );                                                        /*atualiza o controle de matriculas*/
 								$studentTam["team_id"] = $team->id;
-								$studentTeam_id        = StudentTeam::create( [ 'team_id' => $team->id ] ); //cria um registro com a id da turma
-								StudentTeam::findOrFail( $studentTeam_id->id ); //recuperar o registro criado
-								$studentTeam_id->update( [ 'student_id' => $student->id ] );//vincula o estudante com o registro
-								$studentTeam_id->update( [ 'degree_id' => $degree->id ] );//vincula a grade com o registro
+								$studentTeam_id        = StudentTeam::create( [ 'team_id' => $team->id ] );         //cria um registro com a id da turma
+								StudentTeam::findOrFail( $studentTeam_id->id );                                     //recuperar o registro criado
+								$studentTeam_id->update( [ 'student_id' => $student->id ] );                        //vincula o estudante com o registro
+								$studentTeam_id->update( [ 'degree_id' => $degree->id ] );                          //vincula a grade com o registro
 							}
 						}
 					}
@@ -240,13 +270,34 @@ class EnturmController extends Controller{
 		}
 	}
 
-/*	public function list(){
-		$student_teams          = StudentTeam::paginate(20);
+	public function list(){
+		$teams          = Team::where('controll','=','1')->paginate(10);
+			return view( 'admin.enturm.show', compact( 'teams') );
+	}
 
-		 $student_teams = DB::table( 'student_teams')->orderBy('team_id');
+	public function dailies($id){
+		/*return $id;*/
+		$student_team                   =   StudentTeam::findOrfail($id);
+		$team_id                        =   $student_team->team_id;
+		$serie                          =   $student_team->serie;
 
-			return view( 'admin.enturm.show', compact( 'student_teams') );
-	}*/
+		foreach ($student_team->degrees as $degree){
+			$degree_id                 =   $degree->id;
+		};
+
+		$team                           =   Team::findOrFail($team_id);
+		$degree                         =   Degree::findOrFail($degree_id);
+		$student_teams                  =   StudentTeam::all()
+		                                               ->where('team_id',  '=',$team_id)
+		                                               ->where('degree_id','=',$degree_id)
+		                                               ->where('serie',    '=',$serie);
+		$degrees                        =   Degree::all()->where( 'id',       '=', $degree_id );
+		$dailies                        =   Daily::all();
+
+
+		return view('admin.daily.show',compact('student_teams','degrees','team','degree','dailies'));
+	}
+
 
 	/*metódos ajax*/
 	public function team($serie) {
@@ -260,6 +311,5 @@ class EnturmController extends Controller{
 										->where( 'series', '=', $serie )->get();
 		return Response::json($degree);
 	}
-
 
 }

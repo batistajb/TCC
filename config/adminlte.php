@@ -145,6 +145,11 @@ return [
 		            'url'         => 'admin/enturm',
 		            'icon'        => 'fas ion-ios-people',
 	            ],
+	            [
+		            'text'      =>'Listagem',
+		            'url'         => 'admin/enturm.list',
+		            'icon'        => 'fas ion-clipboard',
+	            ],
             ],
         ],
         [

@@ -17,8 +17,7 @@ class TeamController extends Controller
      */
     public function index()
     {
-
-    	$teams = Team::paginate(10);
+    	$teams = Team::where('controll','=','0')->paginate(10);
         return view('admin.team.index', compact('teams'));
     }
 

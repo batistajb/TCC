@@ -29,7 +29,9 @@ $this->get('/','Site\SiteController@index')->name('home');
 		/*Gerenciamneto da enturmação*/
 		Route::resource('enturm','EnturmController');
 		Route::post('enturm.search','EnturmController@search')->name('enturm.search');
-		/*Route::get('enturm.list','EnturmController@list')->name('enturm.list');*/
+		Route::get('enturm.list','EnturmController@list')->name('enturm.list');
+		Route::get('enturm.dailies/{id}','EnturmController@dailies')->name('enturm.dailies');
+		Route::post('enturm.archive','EnturmController@archive')->name('enturm.archive');
 
 
 		/*Gerenciamento das Matrícula*/
