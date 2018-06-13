@@ -45,15 +45,17 @@
                     <tbody>
                     @forelse($student_teams as $student_team)
                         @foreach($student_team->students as $student)
+                            @if($student->enroll == 3)
                             <tr>
                                 <td>{{$student->name}}</td>
                                 <td>{{$student->responsible['name_responsible']}}</td>
                                 <td>{{($student->coef)/100}}</td>
                                 <td>
-                                    <a href="{{$student->id}}/edit" class="btn btn-primary">
+                                    <a href="dailies/{{$student->id}}/edit" class="btn btn-primary">
                                         <i class="ion-edit"></i> Lançar</a>
                                 </td>
                             </tr>
+                            @endif
                         @endforeach
                     @empty
                             <th>Nenhum registro cadastrado!</th>

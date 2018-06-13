@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Daily;
 use App\Models\Degree;
-use App\Models\DegreeSubject;
 use App\Models\Student;
 use App\Models\StudentTeam;
 use App\Models\Subject;
 use App\Models\Team;
-use DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -43,8 +41,19 @@ class DailiesController extends Controller
      */
     public function store(Request $request)
     {
-        return $request;
-    }
+        /*return $request;*/
+
+	    $student_id                     =   $request->student_id;
+
+	    $student                        =   Student::findOrFail($student_id);
+
+	    $student->enroll                = 0;
+	    $student->save();
+
+
+	    return redirect()->route('dailies.index')->with('status','Salvo com sucesso!');
+
+}
 
     /**
      * Display the specified resource.
@@ -159,7 +168,6 @@ class DailiesController extends Controller
 		}else{
 			Daily::create($request->all());
 		}
-
 
 		return redirect()->back()->with('status','Inserido com sucesso!');
 	}

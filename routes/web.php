@@ -18,11 +18,13 @@ $this->get('/','Site\SiteController@index')->name('home');
 
 		Route::get('history/{id}/show','AdminController@showHistory')->name('history.show');
 		Route::get('history/create','AdminController@createHistory')->name('history.create');
+		Route::post('history/search','AdminController@search')->name('history.search');
 
 
 		/*Gerenciamneto das notas e frequencia-diário*/
 		Route::resource('dailies','DailiesController');
-		Route::post('dailies/{request}','DailiesController@search')->name('dailies.search');
+		Route::post('dailies/store','DailiesController@store')->name('dailies.store');
+		Route::post('dailies/','DailiesController@search')->name('dailies.search');
 		Route::post('dailies/subject/{request}','DailiesController@dailies')->name('dailies.subject');
 
 

@@ -38,27 +38,29 @@ class EnturmController extends Controller{
 		$team               =   Team::findOrFail($team_id);
 		$dailies            =   Daily::all();
 
+
 		foreach ($team->studentTeams as $student_team){
 			foreach ($student_team->students as $student){
 				foreach ($dailies as $daily){
-					if($daily->student_id == $student->id){
-						if(($daily->note)&&($daily->frequency)){
-							return back()->with('status','Atenção! Insira as notas e frequencias de todos alunos');
-						}else{
-							return "ok";
-							/*$student_team->qtd--;
+					if($daily->student_id == $student->id) {
+						if($student->enroll == 6) {
+							$student_team->qtd--;
 							$student_team->save();
-							$student->enroll    =   0;
-							$student->serie     =   $student->serie+1;
-							$student->save();
 							$team->controll     =   0;
 							$team->save();                                           //arquivando turma
-							$student_team->delete();*/
-						}
+							$student_team->delete();
+
+						}/*else{
+							return back()->with( 'status', 'Atenção!Faça o registro de todas notas e presenças dos alunos.' );
+						}*/
+						$student->enroll    =   0;
+						$student->serie     =   $student->serie+1;
+						$student->save();
 					}
 				}
 			}
 		}
+
 		return back()->with('status','Registro arquivado com sucesso!');
 	}
 
@@ -102,6 +104,8 @@ class EnturmController extends Controller{
 						$studentTeam_id->update( [ 'serie' => $serie ] );
 						Student::up( $student->id );                                                //Atlz controle da matrícula
 						$studentTeam_id->update( [ 'qtd' => $students_cont + 1 ] );                 //controle da qntidade de alunos da turma
+						$team->controll = 1;
+						$team->save();
 					}
 				}else{
 					return redirect()->route('enturm.index',compact('layout'))
@@ -295,7 +299,7 @@ class EnturmController extends Controller{
 		$dailies                        =   Daily::all();
 
 
-		return view('admin.daily.show',compact('student_teams','degrees','team','degree','dailies'));
+		return view('admin.daily.details',compact('student_teams','degrees','team','degree','dailies'));
 	}
 
 

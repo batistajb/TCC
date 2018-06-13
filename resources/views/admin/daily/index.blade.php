@@ -14,7 +14,7 @@
 @endsection
 
 @section('content')
-    {!! Form::open(array('url'=>route('dailies.search','test')))!!}
+    {!! Form::open(array('url'=>route('dailies.search')))!!}
     <div class="container-fluid col-md-12">
         <hr/>
         <div class="col-md-8  form-group">

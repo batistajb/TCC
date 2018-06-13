@@ -17,14 +17,9 @@
     <aside class="col-md-12">
         <br/>
     </aside>
-    {!! Form::open(array('url'=>route('dailies.subject','test'))) !!}
     <div class="row">
         <div class="box-default">
-            <div class="col-md-3">
-                <div class="col-md-4">
-                    <input type='button' onclick='javascript:history.back()' value='Voltar' name='Voltar' class="btn btn-primary">
-                </div>
-            </div>
+            <div class="col-md-2"></div>
             <div class="container-fluid col-md-8">
                 <div class="container-fluid">
                     <div class="box-body table-responsive no-padding">
@@ -69,12 +64,18 @@
                                 @endforelse
                             </tbody>
                         </table>
+                        <div class="col-md-12">
+                            {!! Form::open(array('url'=>route('dailies.store'))) !!}
+                                <input type="hidden" value="{{$student->id}}" name="student_id"/>
+                                <button type='submit' class="btn btn-success">Concluir</button>
+                            {!! Form::close() !!}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    {!! Form::open(array('url'=>route('dailies.subject','test'))) !!}
     <div class="modal  fade in" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
