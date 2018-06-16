@@ -40,11 +40,9 @@
                             <td>{{$team->studentTeams->last()->qtd}}</td>
                             <td>{{$team->year}}</td>
                             <td>
-                                <a class="btn btn-primary" href="enturm.dailies/{{$team->studentTeams->last()->id}}">
-                                    <i class="ion-eye"></i> Ver</a>
                                 <button type="button" class="btn btn-warning" data-toggle="modal"
                                         data-target="#delete" data-whatever="{{$team->id}}">
-                                    <i class="ion-archive"></i> Arquivar
+                                    <i class="ion-archive"></i> Encerrar
                                 </button>
                             </td>
                         </tr>

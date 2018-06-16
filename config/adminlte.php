@@ -162,13 +162,13 @@ return [
 		            'icon'      =>'history'
 	            ],
             	[
-            		'text'      =>'Declaração',
-		            'url'       => 'admin/Declaration',
+            		'text'      =>'Boletim',
+		            'url'       => 'admin/bulletin',
 		            'icon'      =>'file'
 	            ],
             	[
             		'text'      =>'Arquivo morto',
-		            'url'       => 'admin/old',
+		            'url'       => 'admin/history/old',
 		            'icon'      =>'folder-open'
 	            ]
             ],

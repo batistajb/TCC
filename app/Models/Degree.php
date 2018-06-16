@@ -18,4 +18,8 @@ class Degree extends Model
 	public function studentTeam(){
 		return $this->belongsTo(StudentTeam::class);
 	}
+
+	public function daily(){
+		return $this->belongsTo(Daily::class);
+	}
 }

@@ -44,16 +44,55 @@ class DailiesController extends Controller
         /*return $request;*/
 
 	    $student_id                     =   $request->student_id;
-
+	    $year                           =   $request->year;
 	    $student                        =   Student::findOrFail($student_id);
 
-	    $student->enroll                = 0;
+	    $dailies                        =   Daily::all()
+	                                             ->where('student_id',  '=',$student_id)
+	                                             ->where('year',        '=',$year);
+	    foreach ($dailies as $daily){
+		    if(($daily->note == 0)||($daily->frequency ==0)){
+			    return redirect()->back()->with('status','Atenção! Realize todos os lançamentos das notas e frequencias.');
+		    }
+	    }
+	    foreach ($dailies as $daily){
+		    if(($daily->note < 60)||($daily->frequency < 60)){
+			    $student->status        =   1;              //reprovado
+			    $student->save();
+			    return redirect()->route('dailies.index')->with('status','Salvo com sucesso!');
+		    }else{
+			    $student->status        =   2;              //aprovado
+		    }
+	    }
 	    $student->save();
-
-
 	    return redirect()->route('dailies.index')->with('status','Salvo com sucesso!');
+	}
 
-}
+	public function confirm(Request $request){
+    	/*return $request;*/
+		$team                               =   Team::findOrFail($request->team);
+		$year                               =   $request->year;
+		$degree                             =   Degree::findOrFail($request->degree);
+
+		$student_teams                      =   StudentTeam::all()
+		                                               ->where('team_id',   '=',$team->id)
+		                                               ->where('degree_id', '=',$degree->id);
+
+		foreach ($student_teams as $student_team){
+			foreach ($student_team->students as $student){
+				if($student->status == 0){
+					return redirect()->back()->with('status','Atenção! Encerre as notas e frequencias de todos alunos.');
+				}
+				else{
+					foreach ($student_team->team as $team) {
+						$team->controll     =   1;
+						$team->save();
+					}
+				}
+			}
+		}
+		return redirect()->back()->with( 'status', 'Concluído com sucesso.' );
+	}
 
     /**
      * Display the specified resource.
@@ -74,37 +113,43 @@ class DailiesController extends Controller
      */
     public function edit($id)
     {
-    	$student                = Student::findOrFail($id);
-	    $student_teams          = StudentTeam::all()->where('student_id',  '=',$id);
-	    $dailies                = Daily::all();
+    	$student                    =   Student::findOrFail($id);
+	    $degree                     =   Degree::findOrFail($student->degree_id);
+	    $year                       =   $degree->year;
 
-        return view('admin.daily.edit', compact('student','student_teams','dailies'));
+	    $dailies                    =   Daily::all()
+		                                        ->where('year','=',$year)
+		                                        ->where('student_id','=',$id);
+
+	    $dailies_count                    =   Daily::all()
+		                                        ->where('year','=',$year)
+		                                        ->where('student_id','=',$id)
+		                                        ->count();
+
+	    if(! $dailies_count > 0)
+	    {
+			foreach( $degree->subjects as $subject){
+				$daily                          =   new Daily;
+				$daily->student_id              =   $student->id;
+				$daily->year                    =   $year;
+				$daily->subject_id              =   $subject->id;
+				$daily->degree_id               =   $student->degree_id;
+				$daily->save();
+		    }
+		    $dailies                    =   Daily::all()
+		                                         ->where('year','=',$year)
+		                                         ->where('student_id','=',$id);
+	    }
+        return view('admin.daily.edit', compact('student','dailies','year','degree'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function search(Request $request){
+	/**
+	 * @param Request $request
+	 *
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function search(Request $request){
 	    /*return $request;*/
 	    $team_id                        =   $request->team_id;
 	    $degree_id                      =   $request->degree_id;
@@ -116,6 +161,7 @@ class DailiesController extends Controller
 				                                          ->where('team_id',  '=',$team_id)
 				                                          ->where('degree_id','=',$degree_id)
 				                                          ->where('serie',    '=',$serie);
+
 	    $degrees                        =   Degree::all()->where( 'id',       '=', $degree_id );
 	    $dailies                        =   Daily::all();
 
@@ -133,43 +179,35 @@ class DailiesController extends Controller
 
 	public function dailies(Request $request){
 
-    	$student_id                     =   $request->student_id;
-    	$subject_id                     =   $request->subject_id;
+		$student_id                     =   $request->student_id;
+		$subject_id                     =   $request->subject_id;
     	$frequency                      =   $request->frequency;
     	$note                           =   $request->note;
-    	$coef                           =   ($note*$frequency);
-		$coef_note                      =   0;
-		$coef_total                     =   0;
 
 		$student                        =   Student::findOrFail($student_id);
 
+		$degree                         =   Degree::findOrFail($student->degree_id);
 
-		$subjects                       =   Subject::all()
-					                               ->where('id',        '=',$subject_id)
-					                               ->where('serie',     '=',$student->serie);
+		$year                           =   $degree->year;
 
-		$dailies                        =   Daily::all()
-					                               ->where('subject_id','=',$subject_id)
-					                               ->where('student_id','=',$student_id);
-
-		$daily_count                    =   Daily::all()
+		$dailie                        =   Daily::all()
 					                               ->where('subject_id','=',$subject_id)
 					                               ->where('student_id','=',$student_id)
-					                               ->count();
+					                               ->where('year',      '=',$year)
+					                               ->first();
 
+		$dailie->frequency       =  $frequency;
+		$dailie->note            =  $note;
+		$dailie->year            =  $year;
 
-		if($daily_count > 0){
-			foreach ($dailies as $daily){
-				$daily->frequency       =  $frequency;
-				$daily->note            =  $note;
-				$daily->coef            =  $coef;
-				$daily->save();
-			}
+		if(($frequency < 60)||($note < 60)){
+			$dailie->status            =   1;              //reprovado
 		}else{
-			Daily::create($request->all());
+			$dailie->status            =   2;              //aprovado
 		}
+		$dailie->save();
 
-		return redirect()->back()->with('status','Inserido com sucesso!');
+		return redirect()->back();
 	}
 
 }

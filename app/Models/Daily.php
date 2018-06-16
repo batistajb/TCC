@@ -11,7 +11,8 @@ class Daily extends Model
         'student_id',
         'frequency',
         'note',
-        'coef',
+        'year',
+	    'degree_id'
 	];
 
     public function students(){
@@ -20,6 +21,10 @@ class Daily extends Model
 
     public function subjects(){
 	    return $this->hasMany(Subject::class,'id','subject_id');
+    }
+
+    public function degrees(){
+	    return $this->hasMany(Degree::class,'id','degree_id');
     }
 
 }

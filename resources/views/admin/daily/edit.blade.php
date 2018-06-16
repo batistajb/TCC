@@ -30,22 +30,25 @@
                                 <th><h4><a>Carga horária</a></h4></th>
                                 <th><h4><a>Nota</a></h4></th>
                                 <th><h4><a>Frequencia</a></h4></th>
+                                <th><h4><a>Status</a></h4></th>
                                 <th><h4><a>Ação</a></h4></th>
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($student_teams as $student_team)
-                                @foreach($student_team->degrees as $degree)
-                                    @foreach($degree->subjects as $subject)
+                                @foreach($dailies as $daily)
+                                    @foreach($daily->subjects as $subject)
                                         <tr>
                                             <td>{{$subject->name}}</td>
                                             <td>{{$subject->c_h}} H/A</td>
-                                            @foreach($dailies as $daily)
-                                                @if(($daily->subject_id == $subject->id)&&($student->id == $daily->student_id))
-                                                    <td>{{$daily->note}}</td>
-                                                    <td>{{$daily->frequency}}%</td>
+                                            <td>{{$daily->note}} Pontos</td>
+                                            <td>{{$daily->frequency}}%</td>
+                                                @if($daily->status == 2)
+                                                    <td>Aprovado</td>
+                                                @elseif($daily->status == 1)
+                                                    <td>Reprovado</td>
+                                                @elseif($daily->status == 0)
+                                                    <td>Em curso</td>
                                                 @endif
-                                            @endforeach
                                             <td>
                                                 <button type="button" class="btn btn-primary" data-toggle="modal"
                                                         data-target="#delete" data-whatever="{{$subject->id}}">
@@ -55,18 +58,14 @@
                                         </tr>
                                     @endforeach
                                 @endforeach
-                                @empty
-                                    <th>Nenhum registro cadastrado!</th>
-                                    <th/>
-                                    <th/>
-                                    <th/>
-                                    <th/>
-                                @endforelse
                             </tbody>
                         </table>
-                        <div class="col-md-12">
+                        <div class="col-md-10"></div>
+                        <div class="col-md-2">
+                            <hr/>
                             {!! Form::open(array('url'=>route('dailies.store'))) !!}
                                 <input type="hidden" value="{{$student->id}}" name="student_id"/>
+                                <input type="hidden" value="{{$year}}" name="year"/>
                                 <button type='submit' class="btn btn-success">Concluir</button>
                             {!! Form::close() !!}
                         </div>
@@ -120,3 +119,11 @@
     @endif
 
 @stop
+
+@section('adminlte_js')
+    <script type="text/javascript">
+        function refresh(){
+            window.location.reload()
+        }
+    </script>
+@endsection

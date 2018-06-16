@@ -45,9 +45,8 @@
                             <thead>
                             <tr>
                                 <th>Aluno(a)</th>
-                                <th>Responsável</th>
-                                <th>Idade</th>
-                                <th>Ano/Série</th>
+                                <th>Status</th>
+                                <th>Próxima série/ano</th>
                                 <th>Ações</th>
                             </tr>
                             </thead>
@@ -56,16 +55,20 @@
 
                                 <tr>
                                     <td>{{$student->name}}</td>
-                                    <td>{{$student->responsible['name_responsible']}}</td>
-                                    <td>{{$student->birth}}</td>
-                                    <td>{{$student->serie}}º ano</td>
+                                    @if($student->status == 1)
+                                        <td>Reprovado</td>
+                                        <td>{{$student->serie}}º ano</td>
+                                    @else
+                                        <td>Aprovado</td>
+                                        <td>{{$student->serie+1}}º ano</td>
+                                    @endif
                                     @can('view-enrollment')
                                         <td>
                                             <button type="button" class="btn btn-warning" data-toggle="modal"
                                                     data-target="#delete" data-whatever="{{$student->id}}">
                                                 <i class="ion-archive"></i>Arquivar
                                             </button>
-                                            <a href="students/{{$student->id}}/edit" class="btn btn-primary">
+                                            <a href="{{route('renewEnrollment',$student->id)}}" class="btn btn-primary">
                                                 <i class="ion-android-checkbox-outline"></i>Rematrícular</a>
                                         </td>
                                     @else

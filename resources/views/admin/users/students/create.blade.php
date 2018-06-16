@@ -24,7 +24,8 @@
         </li>
         <li role="presentation"><a href="#endereco" aria-controls="endereco" role="tab" data-toggle="tab">Endereço</a>
         </li>
-        <li role="presentation"><a href="#matricula" aria-controls="matricula" role="tab" data-toggle="tab">Matricular</a>
+        <li role="presentation"><a href="#matricula" aria-controls="matricula" role="tab"
+                                   data-toggle="tab">Matricular</a>
         </li>
     </ul>
     <div class="tab-content">
@@ -71,32 +72,32 @@
 @stop
 @section('js')
     <script type="text/javascript">
-$('select[name=serie]').change(function () {
-var serie = $(this).val();
-/*requisição na tabela das grades*/
-$.get('/admin/ajax-degree/' + serie, function (degree) {
-$('select[name=degree_id]').empty();
-$.each(degree, function (key, value) {
-$('select[name=degree_id]').append('<option value=' + value.id + '>' + value.year + '</option>')
-});
-});
-/*requisição na tabela das turmas*/
-$.get('/admin/ajax-team/' + serie, function (teams) {
-$('select[name=team_id]').empty();
-$.each(teams, function (key, value) {
-$('select[name=team_id]').append('<option value=' + value.id + '>' + value.name + '</option>')
-});
-});
-});
-</script>
-<script type="text/javascript">
-$('.select-series').select2({
-placeholder: "Séries",
-allowClear:"true"
-});
-$('.select-team').select2({
-placeholder: "Turmas",
-allowClear:"true"
-});
-</script>
+        $('select[name=serie]').change(function () {
+            var serie = $(this).val();
+            /*requisição na tabela das grades*/
+            $.get('/admin/ajax-degree/' + serie, function (degree) {
+                $('select[name=degree_id]').empty();
+                $.each(degree, function (key, value) {
+                    $('select[name=degree_id]').append('<option value=' + value.id + '>' + value.year + '</option>')
+                });
+            });
+            /*requisição na tabela das turmas*/
+            $.get('/admin/ajax-team/' + serie, function (teams) {
+                $('select[name=team_id]').empty();
+                $.each(teams, function (key, value) {
+                    $('select[name=team_id]').append('<option value=' + value.id + '>' + value.name + '</option>')
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $('.select-series').select2({
+            placeholder: "Séries",
+            allowClear: "true"
+        });
+        $('.select-team').select2({
+            placeholder: "Turmas",
+            allowClear: "true"
+        });
+    </script>
 @endsection

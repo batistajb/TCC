@@ -16,14 +16,20 @@ $this->get('/','Site\SiteController@index')->name('home');
 		Route::get('ajax-chart','AdminController@chart')->name('chart');//ajax
 
 
-		Route::get('history/{id}/show','AdminController@showHistory')->name('history.show');
-		Route::get('history/create','AdminController@createHistory')->name('history.create');
-		Route::post('history/search','AdminController@search')->name('history.search');
+		/*Gerenciamneto dos históricos boletins*/
+
+		Route::get('history/{id}/show','HistoryController@showHistory')->name('history.show');
+		Route::get('history/create','HistoryController@createHistory')->name('history.create');
+		Route::post('history/store','HistoryController@storeHistory')->name('history.store');
+		Route::get('history/old','HistoryController@old')->name('history.old');
+		Route::post('history/search','HistoryController@search')->name('history.search');
+		Route::get('bulletin','HistoryController@bulletin')->name('history.bulletin');
 
 
 		/*Gerenciamneto das notas e frequencia-diário*/
 		Route::resource('dailies','DailiesController');
 		Route::post('dailies/store','DailiesController@store')->name('dailies.store');
+		Route::post('dailies/confirm','DailiesController@confirm')->name('dailies.confirm');
 		Route::post('dailies/','DailiesController@search')->name('dailies.search');
 		Route::post('dailies/subject/{request}','DailiesController@dailies')->name('dailies.subject');
 
@@ -39,9 +45,11 @@ $this->get('/','Site\SiteController@index')->name('home');
 		/*Gerenciamento das Matrícula*/
 		Route::get('enrolment','EnrollController@enrolment')->name('enrolment');
 		Route::post('enroll/list','EnrollController@enroll')->name('enroll.list');
+		Route::get('enroll/renewEnrollment/{id}','EnrollController@renewEnrollment')->name('renewEnrollment');
 		Route::post('enroll/low','EnrollController@low')->name('enroll.low');
 		Route::get('renew','EnrollController@renew')->name('enroll.renew');
 		Route::get('old','AdminController@old')->name('admin.old');
+		Route::get('old-enroll/{id}','AdminController@edit')->name('old-enroll');
 		Route::get('students/enroll/{id}/edit','EnrollController@renewEdit')->name('enroll.renew.edit');
 		Route::resource('enroll','EnrollController');
 

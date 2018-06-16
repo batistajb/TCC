@@ -75,4 +75,23 @@ class EnrollController extends Controller {
 							->with( 'status', 'Registro arquivado!' );
 	}
 
+	public function renewEnrollment($id){
+		$student_id         =   $id;
+		$student            =   Student::findOrFail($student_id);
+
+		If($student->status == 0){
+			return redirect()   ->back()
+			                    ->with( 'status', 'Atenção! Aluno em curso. Finalize as notas e presenças.' );
+		}elseif ($student->status == 1){
+			$student->enroll = 2;
+			$student->save();
+		}elseif ($student->status == 2){
+			$student->enroll = 2;
+			$student->serie ++;
+			$student->save();
+		}
+		return redirect()   ->back()
+		                    ->with( 'status', 'Rematriculado com sucesso!' );
+	}
+
 }

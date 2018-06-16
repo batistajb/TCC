@@ -23,6 +23,9 @@
             </div>
         </div>
     </div>
+
+    {!! Form::open(array('url'=>route('dailies.confirm'))) !!}
+
     <div class="container-fluid col-md-8">
         @include('admin.enturm.table-info')
     </div>
@@ -36,8 +39,8 @@
                     <thead>
                     <tr>
                         <th>Aluno</th>
-                        <th>Responsável</th>
-                        <th>Coeficiente</th>
+                        <th>Data de nasc.</th>
+                        <th>Status</th>
                         <th>Ações</th>
                     </tr>
 
@@ -45,17 +48,23 @@
                     <tbody>
                     @forelse($student_teams as $student_team)
                         @foreach($student_team->students as $student)
-                            @if($student->enroll == 3)
                             <tr>
                                 <td>{{$student->name}}</td>
-                                <td>{{$student->responsible['name_responsible']}}</td>
-                                <td>{{($student->coef)/100}}</td>
+                                <td>{{$student->birth}}</td>
+                                @if($student->status == 0)
+                                    <td>Em curso</td>
+                                @endif
+                                @if($student->status == 1)
+                                    <td>Reprovado</td>
+                                @endif
+                                @if($student->status == 2)
+                                    <td>Aprovado</td>
+                                @endif
                                 <td>
                                     <a href="dailies/{{$student->id}}/edit" class="btn btn-primary">
                                         <i class="ion-edit"></i> Lançar</a>
                                 </td>
                             </tr>
-                            @endif
                         @endforeach
                     @empty
                             <th>Nenhum registro cadastrado!</th>
@@ -64,11 +73,20 @@
                             <th/>
                             <th/>
                     @endforelse
+                    <th><hr/>
+                        <input type="hidden" value="{{$degree->year}}" name="year"/>
+                        <input type="hidden" value="{{$degree->id}}" name="degree"/>
+                        <input type="hidden" value="{{$team->id}}" name="team"/>
+                        <button type='submit' class="btn btn-success">
+                            <i class="ion-checkmark"></i>Concluir Lançamentos</button>
+                    </th>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    {!! Form::close() !!}
 
     @if (session('status'))
         <script>
