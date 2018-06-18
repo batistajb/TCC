@@ -13,6 +13,8 @@ $this->get('/','Site\SiteController@index')->name('home');
 		Route::get('dashboard','AdminController@index')->name('dashboard');
 
 		Route::get('ajax-degree/{serie}','EnturmController@degree')->name('test');//ajax
+		Route::get('students/select','StudentsController@select')->name('students.select');//ajax
+		Route::get('teachers/select','TeacherController@select')->name('teachers.select');//ajax
 		Route::get('ajax-team/{serie}','EnturmController@Team')->name('test');//ajax
 		Route::get('ajax-line-chart','AdminController@lineChart')->name('lineChart');//ajax
 
@@ -24,6 +26,9 @@ $this->get('/','Site\SiteController@index')->name('home');
 		Route::post('history/store','HistoryController@storeHistory')->name('history.store');
 		Route::get('history/old','HistoryController@old')->name('history.old');
 		Route::post('history/search','HistoryController@search')->name('history.search');
+		Route::get('old-history/{id}','HistoryController@oldHistory')->name('old-history');
+		Route::get('old','HistoryController@old')->name('admin.old');
+
 
 		Route::get('bulletin','HistoryController@showBulletin')->name('bulletin');
 		Route::post('bulletin/create','HistoryController@createBulletin')->name('createBulletin');
@@ -40,7 +45,7 @@ $this->get('/','Site\SiteController@index')->name('home');
 		/*Gerenciamneto da enturmação*/
 		Route::resource('enturm','EnturmController');
 		Route::post('enturm.search','EnturmController@search')->name('enturm.search');
-		Route::get('enturm.list','EnturmController@list')->name('enturm.list');
+		Route::get('enturm/show','EnturmController@show')->name('enturm.show');
 		Route::get('enturm.dailies/{id}','EnturmController@dailies')->name('enturm.dailies');
 		Route::post('enturm.archive','EnturmController@archive')->name('enturm.archive');
 
@@ -51,10 +56,9 @@ $this->get('/','Site\SiteController@index')->name('home');
 		Route::get('enroll/renewEnrollment/{id}','EnrollController@renewEnrollment')->name('renewEnrollment');
 		Route::post('enroll/low','EnrollController@low')->name('enroll.low');
 		Route::get('renew','EnrollController@renew')->name('enroll.renew');
-		Route::get('old','AdminController@old')->name('admin.old');
-		Route::get('old-enroll/{id}','AdminController@edit')->name('old-enroll');
 		Route::get('students/enroll/{id}/edit','EnrollController@renewEdit')->name('enroll.renew.edit');
 		Route::resource('enroll','EnrollController');
+		Route::get('old-enroll/{id}','HistoryController@edit')->name('old-enroll');
 
 
 
@@ -66,16 +70,20 @@ $this->get('/','Site\SiteController@index')->name('home');
 		Route::resource('users','UsersController');
 
 
-
-
-		Route::post('subjects/search','SubjectsController@search')->name('subjects.search');
-		Route::post('teacher/search','TeacherController@search')->name('teacher.search');
 		Route::get('myProfile','UsersController@myProfile')->name('myProfile');
 		Route::patch('myProfile','UsersController@editProfile')->name('myProfile');
 
 		/*Gerando PDF*/
 		Route::get('bulletin/pdf', 'HistoryController@boletimPdf')->name('boletimPdf');
 		Route::get('history/pdf', 'HistoryController@historyPdf')->name('historyPdf');
+
+		//Rotas das buscas pelo select
+		Route::post('enroll/searchEnroll','EnrollController@searchEnroll')->name('searchEnroll');
+		Route::post('enroll/searchEnrollRenew','EnrollController@searchEnrollRenew')->name('searchEnrollRenew');
+		Route::post('enroll/searchEnrollment','EnrollController@searchEnrollment')->name('searchEnrollment');
+		Route::post('history/searchOld','HistoryController@searchOld')->name('searchOld');
+		Route::post('students/searchStudent','StudentsController@searchStudent')->name('searchStudent');
+		Route::post('teacher/searchTeacher','TeacherController@searchTeacher')->name('searchTeacher');
 	});
 
 });

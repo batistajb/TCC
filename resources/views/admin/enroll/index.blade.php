@@ -20,16 +20,23 @@
         <div class="col-md-12">
             <div class="box-header">
                 <div class="col-md-4">
-                    <a href="{{route('students.create')}}" class="btn btn-success">Novo aluno(a)</a>
+                    @if(empty($student))
+                        <a href="{{route('students.create')}}" class="btn btn-success">Novo aluno(a)</a>
+                    @else
+                        <a href="{{route('enroll.index')}}" class="btn btn-success">Listar todos</a>
+                    @endif
                 </div>
                 <div class="col-md-8">
-                    <div class="input-group input-group-sm" style="width: 450px;">
-                        <input type="text" name="table_search" class="form-control pull-right"
-                               placeholder="Alunos pré-cadastrados">
-                        <div class="input-group-btn">
-                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                    {!! Form::open(array('url'=>route('searchEnroll')))!!}
+                        <div class="input-group input-group-sm" style="width: 450px;">
+                            <select class="select-students form-control" name="students">
+                                <option></option>
+                            </select>
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </div>
                         </div>
-                    </div>
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>
@@ -45,11 +52,31 @@
                             <tr>
                                 <th>Aluno(a)</th>
                                 <th>Responsável</th>
-                                <th>Idade</th>
+                                <th>Data de nascimento</th>
                                 <th>Ano/Série</th>
                                 <th>Ações</th>
                             </tr>
                             </thead>
+                            @if(!empty($student))
+                                <tr>
+                                    <td>{{$student->name}}</td>
+                                    <td>{{$student->responsible['name_responsible']}}</td>
+                                    <td>{{$student->birth}}</td>
+                                    <td>{{$student->serie}}º ano</td>
+                                    @can('view-enrollment')
+                                        <td>
+                                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#delete" data-whatever="{{$student->id}}">
+                                                <i class="ion-close-circled"></i> Lista de espera
+                                            </button>
+                                            <a href="enroll/{{$student->id}}/edit" class="btn btn-success">
+                                                <i class="ion-android-checkbox-outline"></i>Confirmar</a>
+                                        </td>
+                                    @else
+                                        <td>Usuário não autorizado</td>
+                                    @endcan
+                                </tr>
+                            @else
                             <tbody>
                             @forelse($students as $student)
                                 <tr>
@@ -80,6 +107,7 @@
                             </tbody>
                         </table>
                         {{$students->links()}}
+                        @endif
                     </div>
                 </div>
             </div>
@@ -117,5 +145,22 @@
             confirm("{{session('status')}}");
         </script>
     @endif
-
 @endsection
+
+@section('adminlte_js')
+    <script type="text/javascript">
+
+            /*requisição na tabela das turmas*/
+            $.get('/admin/students/select', function (students) {
+                $.each(students, function (key, value) {
+                    $('select[name=students]').append('<option value=' + value.id + '>' + value.name + '</option>')
+                });
+            });
+
+        $('.select-students').select2({
+            placeholder: "Buscar aluno",
+            allowClear:"true",
+            minimumInputLength:1
+        });
+    </script>
+@stop

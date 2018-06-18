@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Response;
 
 class TeacherController extends Controller {
 
@@ -106,10 +107,22 @@ class TeacherController extends Controller {
 		return \Validator::make($data,$rules,$mensagens);
 	}
 
-	public function search(Request $request){
-
-		$professor = Teacher::findOrFail($request->professor_id);
-		$professores = Teacher::all();
-		return view('admin.users.teachers.search',compact('professor','professores'));
+	public function select(){
+		$teachers    =  Teacher::all();
+		return Response::json( $teachers );
 	}
+
+
+	public function searchTeacher(Request $request){
+
+		$teacher    =  Teacher::all()
+		                      ->where('id','=',$request->teachers)
+		                      ->first();
+		if(empty($teacher)){
+			return back()->with('status', 'Professor não cadastrado!');
+		}else{
+			return view('admin.users.teachers.index',compact('teacher'));
+		}
+	}
+
 }

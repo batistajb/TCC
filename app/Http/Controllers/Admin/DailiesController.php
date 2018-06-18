@@ -78,6 +78,7 @@ class DailiesController extends Controller
 		                                               ->where('team_id',   '=',$team->id)
 		                                               ->where('degree_id', '=',$degree->id);
 
+
 		foreach ($student_teams as $student_team){
 			foreach ($student_team->students as $student){
 				if($student->status == 0){
@@ -85,12 +86,15 @@ class DailiesController extends Controller
 				}
 				else{
 					foreach ($student_team->team as $team) {
-						$team->controll     =   1;
+						$team->controll     =   2;
 						$team->save();
 					}
 				}
 			}
 		}
+		if(empty($student_team)){
+			return redirect()->back()->with('status','Atenção! Não existes alunos nesta turma.');
+		}else
 		return redirect()->back()->with( 'status', 'Concluído com sucesso.' );
 	}
 

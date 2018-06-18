@@ -20,16 +20,23 @@
         <div class="col-md-12">
             <div class="box-header">
                 <div class="col-md-4">
-                    <a href="{{route('students.create')}}" class="btn btn-success">Novo aluno(a)</a>
+                    @if(empty($student))
+                        <a href="{{route('students.create')}}" class="btn btn-success">Novo aluno(a)</a>
+                    @else
+                        <a href="{{route('enrolment')}}" class="btn btn-success">Listar todos</a>
+                    @endif
                 </div>
                 <div class="col-md-8">
+                    {!! Form::open(array('url'=>route('searchEnrollment')))!!}
                     <div class="input-group input-group-sm" style="width: 450px;">
-                        <input type="text" name="table_search" class="form-control pull-right"
-                               placeholder="Alunos pré-cadastrados">
+                        <select class="select-students form-control" name="students">
+                            <option></option>
+                        </select>
                         <div class="input-group-btn">
                             <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>
@@ -51,7 +58,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($students as $student)
+                            @if(!empty($student))
                                 <tr>
                                     <td>{{$student->name}}</td>
                                     <td>{{$student->responsible['name_responsible']}}</td>
@@ -60,24 +67,45 @@
                                     @can('view-enrollment')
                                         <td>
                                             <button type="button" class="btn btn-success" data-toggle="modal"
-                                            data-target="#delete" data-whatever="{{$student->id}}">
-                                            <i class="ion-android-checkbox-outline"></i> Matrícular
+                                                    data-target="#delete" data-whatever="{{$student->id}}">
+                                                <i class="ion-android-checkbox-outline"></i> Matrícular
                                             </button>
                                         </td>
                                     @else
                                         <td>Usuário não autorizado</td>
                                     @endcan
                                 </tr>
-                                @empty
-                                    <th>Nenhum registro cadastrado!</th>
-                                    <th/>
-                                    <th/>
-                                    <th/>
-                                    <th/>
-                                @endforelse
                             </tbody>
                         </table>
-                        {{$students->links()}}
+                            @else
+                                @forelse($students as $student)
+                                    <tr>
+                                        <td>{{$student->name}}</td>
+                                        <td>{{$student->responsible['name_responsible']}}</td>
+                                        <td>{{$student->birth}}</td>
+                                        <td>{{$student->serie}}º ano</td>
+                                        @can('view-enrollment')
+                                            <td>
+                                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                                data-target="#delete" data-whatever="{{$student->id}}">
+                                                <i class="ion-android-checkbox-outline"></i> Matrícular
+                                                </button>
+                                            </td>
+                                        @else
+                                            <td>Usuário não autorizado</td>
+                                        @endcan
+                                    </tr>
+                                    @empty
+                                        <th>Nenhum registro cadastrado!</th>
+                                        <th/>
+                                        <th/>
+                                        <th/>
+                                        <th/>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                            {{$students->links()}}
+                        @endif
                     </div>
                 </div>
             </div>
@@ -116,3 +144,22 @@
     @endif
 
 @endsection
+
+
+@section('adminlte_js')
+    <script type="text/javascript">
+
+        /*requisição na tabela das turmas*/
+        $.get('/admin/students/select', function (students) {
+            $.each(students, function (key, value) {
+                $('select[name=students]').append('<option value=' + value.id + '>' + value.name + '</option>')
+            });
+        });
+
+        $('.select-students').select2({
+            placeholder: "Buscar aluno",
+            allowClear:"true",
+            minimumInputLength:1
+        });
+    </script>
+@stop

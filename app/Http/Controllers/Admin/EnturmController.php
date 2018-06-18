@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Response;
 
-class EnturmController extends Controller{
+class EnturmController extends Controller {
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -21,7 +21,7 @@ class EnturmController extends Controller{
 	public function index() {
 		$layout = 0;
 
-		return view( 'admin.enturm.index',compact('layout'));
+		return view( 'admin.enturm.index', compact( 'layout' ) );
 	}
 
 	/**
@@ -31,37 +31,27 @@ class EnturmController extends Controller{
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function archive(Request $request) {
+	public function archive( Request $request ) {
 		/*return $request;*/
 
-		$team_id            =  $request->team_id;
-		$team               =   Team::findOrFail($team_id);
-		$dailies            =   Daily::all();
+		$team_id = $request->team_id;
+		$team    = Team::findOrFail( $team_id );
 
-
-		foreach ($team->studentTeams as $student_team){
-			foreach ($student_team->students as $student){
-				foreach ($dailies as $daily){
-					if($daily->student_id == $student->id) {
-						if($student->enroll == 6) {
-							$student_team->qtd--;
-							$student_team->save();
-							$team->controll     =   0;
-							$team->save();                                           //arquivando turma
-							$student_team->delete();
-
-						}/*else{
-							return back()->with( 'status', 'Atenção!Faça o registro de todas notas e presenças dos alunos.' );
-						}*/
-						$student->enroll    =   0;
-						$student->serie     =   $student->serie+1;
-						$student->save();
-					}
+		if($team->controll == 2){
+			foreach ( $team->studentTeams as $student_team ) {
+				foreach ( $student_team->students as $student ) {
+					$student->enroll = 0;
+					$student->serie  = $student->serie + 1;
+					$student->degree_id  = 0;
+					$student->save();
 				}
 			}
+			$team->delete();
+			return back()->with( 'status', 'Registro arquivado com sucesso!' );
+		}else{
+			return back()->with( 'status', 'Atenção! Realize o fechamento dos diários da turma!' );
 		}
 
-		return back()->with('status','Registro arquivado com sucesso!');
 	}
 
 	/**
@@ -73,31 +63,23 @@ class EnturmController extends Controller{
 	 */
 	public function store( Request $request ) {
 		/*return $request;*/
-		$layout         = 0;
-		$serie          = $request->serie;                           //série/ano que será enturmada
-		$degree_id      = $request->degree_id;                      //ano(data) da enturmação
-		$team_id        = $request->team_id;                        //id da turma que será enturmada
+		$layout    = 0;
+		$serie     = $request->serie;                           //série/ano que será enturmada
+		$degree_id = $request->degree_id;                      //ano(data) da enturmação
+		$team_id   = $request->team_id;                        //id da turma que será enturmada
 
-		$team           =  Team::findOrFail($team_id);
+		$team = Team::findOrFail( $team_id );
 
-		$students       = Student::all()
-		                   ->where('serie',     '=',    $serie)
-		                   ->where('degree_id', '=',    $degree_id)
-		                   ->where('enroll',    '=',    2 );
+		$students = Student::all()->where( 'serie', '=', $serie )->where( 'degree_id', '=', $degree_id )->where( 'enroll', '=', 2 );
 
-		$students_count       = Student::all()
-		                         ->where('serie',     '=',    $serie)
-		                         ->where('degree_id', '=',    $degree_id)
-		                         ->where('enroll',    '=',    2 )->count();
+		$students_count = Student::all()->where( 'serie', '=', $serie )->where( 'degree_id', '=', $degree_id )->where( 'enroll', '=', 2 )->count();
 
-		if($students_count > 0){
-			foreach ( $students as $student ){
-				$students_cont = DB::table( 'student_teams' )
-				                   ->where( 'team_id','=', $team_id)
-				                   ->count();
-				if ($team->qtd_students > $students_cont){
-					if($student->enroll == 2){
-						$studentTeam_id        = StudentTeam::create( [ 'team_id' => $team_id  ] );     //cria um registro com a id da turma
+		if ( $students_count > 0 ) {
+			foreach ( $students as $student ) {
+				$students_cont = DB::table( 'student_teams' )->where( 'team_id', '=', $team_id )->count();
+				if ( $team->qtd_students > $students_cont ) {
+					if ( $student->enroll == 2 ) {
+						$studentTeam_id = StudentTeam::create( [ 'team_id' => $team_id ] );     //cria um registro com a id da turma
 						StudentTeam::findOrFail( $studentTeam_id->id );                                 //recuperar o registro criado
 						$studentTeam_id->update( [ 'student_id' => $student->id ] );                     //vincula o estudante com o registro
 						$studentTeam_id->update( [ 'degree_id' => $degree_id ] );                      //vincula a grade com o registro
@@ -107,16 +89,14 @@ class EnturmController extends Controller{
 						$team->controll = 1;
 						$team->save();
 					}
-				}else{
-					return redirect()->route('enturm.index',compact('layout'))
-					                 ->with('status','Limite de alunos por turma excedido! Selecione uma nova turma');
+				} else {
+					return redirect()->route( 'enturm.index', compact( 'layout' ) )->with( 'status', 'Limite de alunos por turma excedido! Selecione uma nova turma' );
 				}
 			}
-			return redirect()->route('enturm.index',compact('layout'))
-			                 ->with('status','Enturmação concluída!');
-		}else{
-			return redirect()->route('enturm.index',compact('layout'))
-			                 ->with('status','Não existe alunos para enturmar!');
+
+			return redirect()->route( 'enturm.index', compact( 'layout' ) )->with( 'status', 'Enturmação concluída!' );
+		} else {
+			return redirect()->route( 'enturm.index', compact( 'layout' ) )->with( 'status', 'Não existe alunos para enturmar!' );
 		}
 	}
 
@@ -127,18 +107,14 @@ class EnturmController extends Controller{
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function details( ) {
+	public function details() {
 
-		return view('admin.enturm.show');
+		return view( 'admin.enturm.show' );
 		/*$degree = Degree::findOrFail($id);
 		$subjects = $degree->subjects()->getQuery()->get(['subject_id','name']);
 		return \Response::json($subjects);*/
 	}
 
-	public function show() {
-		$student_teams = StudentTeam::all();
-		return view('admin.enturm.enturm',compact('student_teams'));
-	}
 
 	/**
 	 * Show the form for editing the specified resource.
@@ -148,23 +124,11 @@ class EnturmController extends Controller{
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit( $id ) {
-		$student                = Student::findOrFail( $id );
-		$student->enroll        = 2;
+		$student         = Student::findOrFail( $id );
+		$student->enroll = 2;
 		$student->save();
 
 		return back()->with( 'status', 'Aluno Matriculado com sucesso!' );
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request $request
-	 * @param  int $id
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update( Request $request, $id ) {
-		//
 	}
 
 	/**
@@ -176,70 +140,65 @@ class EnturmController extends Controller{
 	 */
 	public function destroy( Request $request ) {/*usado para pesquisar as turmas e retornar os alunos que estão aptos para serem esnturmados*/
 		/*return $request;*/
-		$team_id                = $request->team_id;
-		$degree_id              = $request->degree_id;
-		$serie                  = $request->serie;
-		$layout                 = 1;
+		$team_id   = $request->team_id;
+		$degree_id = $request->degree_id;
+		$serie     = $request->serie;
+		$layout    = 1;
 
-		$team                   = Team::findOrFail($team_id);
-		$degree                 = Degree::findOrFail($degree_id);
-		$year                   = $degree->year;
+		$team   = Team::findOrFail( $team_id );
+		$degree = Degree::findOrFail( $degree_id );
+		$year   = $degree->year;
 
-		$students               = Student::all()
-				                    ->where('serie','=',$serie)
-				                    ->where('degree_id', '=', $degree_id)
-									->where('enroll', '=',2 );
+		$students = Student::all()->where( 'serie', '=', $serie )->where( 'degree_id', '=', $degree_id )->where( 'enroll', '=', 2 );
 
-		$student_teams = StudentTeam::paginate(10);
+		$student_teams = StudentTeam::paginate( 10 );
 
-		return view('admin.enturm.index',
-				compact('team','students','degree','layout','student_teams'));
+		return view( 'admin.enturm.index', compact( 'team', 'students', 'degree', 'layout', 'student_teams' ) );
 
 	}
 
 	public function enturm() {
-		$student_teams          = StudentTeam::paginate(20);
-		$degrees                = Degree::all();
+		$student_teams = StudentTeam::paginate( 20 );
+		$degrees       = Degree::all();
 
-		return view( 'admin.enturm.enturm',
-				compact( 'teams', 'degrees','student_teams','students') );
+		return view( 'admin.enturm.enturm', compact( 'teams', 'degrees', 'student_teams', 'students' ) );
 	}
 
 	public function search( Request $request ) {
 		/*return $request;*/
-		$serie                          = $request->turma;             //série/ano que será enturmada
-		$year                           = $request->year;              //ano(data) da enturmação
-		$team_id                        = $request->team;              //id da turma que será enturmada
-		$degree_id                      = $request->degree_turma;              //id da turma que será enturmada
+		$serie     = $request->turma;             //série/ano que será enturmada
+		$year      = $request->year;              //ano(data) da enturmação
+		$team_id   = $request->team;              //id da turma que será enturmada
+		$degree_id = $request->degree_turma;              //id da turma que será enturmada
 
-		$degrees                        = Degree::all( 'year', 'id' );
+		$degrees = Degree::all( 'year', 'id' );
 
-		$students                       = DB::table( 'students' )->where( [
-											[ 'serie', '=', $serie ],
-											[ 'year', '=', $year ],
-											[ 'enroll', 2 ]
-										] )->get();
+		$students = DB::table( 'students' )->where( [
+			[ 'serie', '=', $serie ],
+			[ 'year', '=', $year ],
+			[ 'enroll', 2 ]
+		] )->get();
 
-		$students_cont                  = DB::table( 'students' )->where( [
-											[ 'serie', '=', $serie ],
-											[ 'year', '=', $year ],
-											[ 'enroll', 2 ]
-										] )->get()->count();
+		$students_cont = DB::table( 'students' )->where( [
+			[ 'serie', '=', $serie ],
+			[ 'year', '=', $year ],
+			[ 'enroll', 2 ]
+		] )->get()->count();
 
-		$teams                          = DB::table( 'teams' )->where( [
-											[ 'serie', '=', $serie ],
-											[ 'year', '=', $year ]
-										] )->get();
+		$teams = DB::table( 'teams' )->where( [
+			[ 'serie', '=', $serie ],
+			[ 'year', '=', $year ]
+		] )->get();
 
-		$degreess                       = DB::table( 'degrees' )->where( [
-											[ 'series', '=', $serie ],
-											[ 'year', '=', $year ],
-										] )->get();
+		$degreess = DB::table( 'degrees' )->where( [
+			[ 'series', '=', $serie ],
+			[ 'year', '=', $year ],
+		] )->get();
 
-		$student_teams                  = StudentTeam::all();
+		$student_teams = StudentTeam::all();
 
-		if ( $request->team != null) {                                                  //Direciona para a enturmação
-			if($students_cont > 0) {
+		if ( $request->team != null ) {                                                  //Direciona para a enturmação
+			if ( $students_cont > 0 ) {
 				foreach ( $degreess as $degree ) {                                 //percorre as grades cadastradas
 					foreach ( $teams as $team ) {                                 //percorre as turmas cadastradas
 						foreach ( $students as $student ) {                      //pecorre os estudantes cadastrados
@@ -256,64 +215,54 @@ class EnturmController extends Controller{
 						}
 					}
 				}
-				return redirect()
-					->route( 'enturm',
-						compact( 'teams',
-							'students', 'serie',
-								'degrees', 'year', 'request',
-								'student_teams','degreess' ) )
-									->with( 'status', 'Enturmação Concluída!' );
-			}else
-				return redirect()
-					->route( 'enturm.search2',
-						compact( 'teams','students', 'serie', 'degrees','year', 'request','student_teams','degreess' ) )
-							->with( 'status', 'Não existe alunos para enturmar!' );
+
+				return redirect()->route( 'enturm', compact( 'teams', 'students', 'serie', 'degrees', 'year', 'request', 'student_teams', 'degreess' ) )->with( 'status', 'Enturmação Concluída!' );
+			} else {
+				return redirect()->route( 'enturm.search2', compact( 'teams', 'students', 'serie', 'degrees', 'year', 'request', 'student_teams', 'degreess' ) )->with( 'status', 'Não existe alunos para enturmar!' );
+			}
 		} else {
-			return view( 'admin.enturm.enturm',
-				compact( 'teams', 'students','serie', 'degrees', 'year', 'request','student_teams') );
+			return view( 'admin.enturm.enturm', compact( 'teams', 'students', 'serie', 'degrees', 'year', 'request', 'student_teams' ) );
 		}
 	}
 
-	public function list(){
-		$teams          = Team::where('controll','=','1')->paginate(10);
-			return view( 'admin.enturm.show', compact( 'teams') );
+	public function show() {
+		$teams = Team::where( 'controll', '>=', '1' )->paginate( 10 );
+
+		return view( 'admin.enturm.show', compact( 'teams' ) );
 	}
 
-	public function dailies($id){
+	public function dailies( $id ) {
 		/*return $id;*/
-		$student_team                   =   StudentTeam::findOrfail($id);
-		$team_id                        =   $student_team->team_id;
-		$serie                          =   $student_team->serie;
+		$student_team = StudentTeam::findOrfail( $id );
+		$team_id      = $student_team->team_id;
+		$serie        = $student_team->serie;
 
-		foreach ($student_team->degrees as $degree){
-			$degree_id                 =   $degree->id;
+		foreach ( $student_team->degrees as $degree ) {
+			$degree_id = $degree->id;
 		};
 
-		$team                           =   Team::findOrFail($team_id);
-		$degree                         =   Degree::findOrFail($degree_id);
-		$student_teams                  =   StudentTeam::all()
-		                                               ->where('team_id',  '=',$team_id)
-		                                               ->where('degree_id','=',$degree_id)
-		                                               ->where('serie',    '=',$serie);
-		$degrees                        =   Degree::all()->where( 'id',       '=', $degree_id );
-		$dailies                        =   Daily::all();
+		$team          = Team::findOrFail( $team_id );
+		$degree        = Degree::findOrFail( $degree_id );
+		$student_teams = StudentTeam::all()->where( 'team_id', '=', $team_id )->where( 'degree_id', '=', $degree_id )->where( 'serie', '=', $serie );
+		$degrees       = Degree::all()->where( 'id', '=', $degree_id );
+		$dailies       = Daily::all();
 
 
-		return view('admin.daily.details',compact('student_teams','degrees','team','degree','dailies'));
+		return view( 'admin.daily.details', compact( 'student_teams', 'degrees', 'team', 'degree', 'dailies' ) );
 	}
 
 
 	/*metódos ajax*/
-	public function team($serie) {
-		$teams                      =   DB::table( 'teams' )
-										->where( 'serie', '=', $serie )->get();
-		return \Response::json($teams);
+	public function team( $serie ) {
+		$teams = DB::table( 'teams' )->where( 'serie', '=', $serie )->get();
+
+		return \Response::json( $teams );
 	}
 
-	public function degree($serie) {
-		$degree                     =   DB::table( 'degrees' )
-										->where( 'series', '=', $serie )->get();
-		return Response::json($degree);
+	public function degree( $serie ) {
+		$degree = DB::table( 'degrees' )->where( 'series', '=', $serie )->get();
+
+		return Response::json( $degree );
 	}
 
 }

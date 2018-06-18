@@ -83,6 +83,6 @@
 
 @stop
 
-@section('js')
+@section('adminlte_js')
     @include('admin.enturm.js')
 @endsection

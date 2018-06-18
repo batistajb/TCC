@@ -147,7 +147,7 @@ return [
 	            ],
 	            [
 		            'text'      =>'Listagem',
-		            'url'         => 'admin/enturm.list',
+		            'url'         => 'admin/enturm/show',
 		            'icon'        => 'fas ion-clipboard',
 	            ],
             ],

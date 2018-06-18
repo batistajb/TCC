@@ -37,7 +37,7 @@
                                 </thead>
                                 <tbody id="student_teams">
                                 @foreach ($student_teams as $teams)
-                                    @foreach ($teams->teams as $team)
+                                    @foreach ($teams->team as $team)
                                         @foreach ($degrees as $degree_id)
                                             @if(($degree_id->id==$teams->degree_id)
                                                                &&($team->year==$year)

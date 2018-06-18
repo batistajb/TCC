@@ -11,38 +11,44 @@
 @stop
 
 @section('content')
+    <hr/>
+    <h1 class="header-title">Listagem de professores</h1>
+    <aside class="col-md-12">
+        <br/>
+    </aside>
     <div class="row">
-        <div class="col-md-12">
-            <div class="box-header">
-                <h1 class="box-tile">Listagem de professores</h1>
-                <div class="col-md-4">
-                    @if(Request::url()=='http://'.$_SERVER['HTTP_HOST'].'/admin/teacher/search')
-                        <a href="{{route('teacher')}}" class="btn btn-success">Listar todos professores</a>
-                    @else
-                        <a href="{{route('teacher.create')}}" class="btn btn-success">Novo professsor</a>
-                    @endif
-                </div>
-                <div class="col-md-8">
-                    <form method="post" action="{{url('admin/teacher/search')}}" class="form-group">
+            <div class="col-md-12">
+                <div class="box-header">
+                    <div class="col-md-4">
                         <div class="col-md-4">
-                            {{csrf_field()}}
-                            <select class="select-turmas form-control" name="turma_id">
-                                <option></option>
-                                @foreach($teachers as $teacher)
-                                    <option value="{{$teacher->id}}">{{$teacher->name}}</option>
-                                @endforeach
-                            </select>
+                            @if(empty($teacher))
+                                <a href="{{route('teacher.create')}}" class="btn btn-success">Novo professor(a)</a>
+                            @else
+                                <a href="{{route('teacher.index')}}" class="btn btn-success">Listar todos</a>
+                            @endif
                         </div>
-                        <button type="submit" class="btn btn-default inline"><i class="fa fa-search"></i></button>
-                    </form>
+                    </div>
+                    <div class="col-md-8">
+                        {!! Form::open(array('url'=>route('searchTeacher')))!!}
+                        <div class="input-group input-group-sm" style="width: 450px;">
+                            <select class="select-teachers form-control" name="teachers">
+                                <option></option>
+                            </select>
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        {!! Form::close() !!}
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="box-default">
-                <div class="container-fluid col-md-12">
-                    <div class="container-fluid">
-                        <table id="tInfo" class="table table-striped table-bordered fixed">
+    <div class="row">
+        <div class="box-default">
+            <div class="container-fluid col-md-12">
+                <div class="container-fluid">
+                    <div class="box-body table-responsive no-padding">
+                        <table id="tInfo" class="table table-hover">
                             <thead>
                             <tr>
                                 <th>Nome</th>
@@ -51,31 +57,50 @@
                                 <th>Ação</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            @forelse($teachers as $teacher)
-                                <tr>
-                                    <td>{{$teacher->name}}</td>
-                                    <td>{{$teacher->cpf}}</td>
-                                    <td>{{$teacher->tel}}</td>
-                                    <td>
-                                        <a href="teacher/{{$teacher->id}}/edit" class="btn btn-primary">
-                                            <i class="ion-edit"></i> Editar</a>
-                                        <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                data-target="#delete" data-whatever="{{$teacher->id}}"><i
-                                                    class="ion-trash-b"></i> Excluir
-                                        </button>
-                                    </td>
-                                </tr>
-                            @empty
-                                <th>Nenhum registro cadastrado!</th>
-                                <th/>
-                                <th/>
-                                <th/>
-                                <th/>
-                            @endforelse
-                            </tbody>
+                            @if(!empty($teacher))
+                                <tbody>
+                                    <tr>
+                                        <td>{{$teacher->name}}</td>
+                                        <td>{{$teacher->cpf}}</td>
+                                        <td>{{$teacher->tel}}</td>
+                                        <td>
+                                            <a href="teacher/{{$teacher->id}}/edit" class="btn btn-primary">
+                                                <i class="ion-edit"></i> Editar</a>
+                                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#delete" data-whatever="{{$teacher->id}}"><i
+                                                        class="ion-trash-b"></i> Excluir
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
                         </table>
-                        {{$teachers->links()}}
+                            @else
+                            <tbody>
+                                @forelse($teachers as $teacher)
+                                    <tr>
+                                        <td>{{$teacher->name}}</td>
+                                        <td>{{$teacher->cpf}}</td>
+                                        <td>{{$teacher->tel}}</td>
+                                        <td>
+                                            <a href="teacher/{{$teacher->id}}/edit" class="btn btn-primary">
+                                                <i class="ion-edit"></i> Editar</a>
+                                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#delete" data-whatever="{{$teacher->id}}"><i
+                                                        class="ion-trash-b"></i> Excluir
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <th>Nenhum registro cadastrado!</th>
+                                    <th/>
+                                    <th/>
+                                    <th/>
+                                    <th/>
+                                @endforelse
+                                </tbody>
+                            </table>
+                            {{$teachers->links()}}
+                        @endif
                     </div>
                 </div>
             </div>
@@ -116,5 +141,21 @@
         </script>
     @endif
 
+@stop
 
+
+@section('adminlte_js')
+    <script type="text/javascript">
+        /*requisição na tabela das turmas*/
+        $.get('/admin/teachers/select', function (teachers) {
+            $.each(teachers, function (key, value) {
+                $('select[name=teachers]').append('<option value=' + value.id + '>' + value.name + '</option>')
+            });
+        });
+        $('.select-teachers').select2({
+            placeholder: "Buscar professor",
+            allowClear: "true",
+            minimumInputLength: 1
+        });
+    </script>
 @stop

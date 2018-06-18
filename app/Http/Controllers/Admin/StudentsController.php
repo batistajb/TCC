@@ -7,6 +7,7 @@ use App\Models\Responsible;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Response;
 
 class StudentsController extends Controller
 {
@@ -124,5 +125,24 @@ class StudentsController extends Controller
 		];
 		return \Validator::make($data,$rules,$mensagens);
 	}
+
+	public function select(){
+    	$students    =  Student::all();
+		return Response::json( $students );
+	}
+
+
+	public function searchStudent(Request $request){
+
+		$student    =  Student::all()
+		                      ->where('id','=',$request->students)
+		                      ->first();
+		if(empty($student)){
+			return back()->with('status', 'Aluno não cadastrado!');
+		}else{
+			return view('admin.users.students.index',compact('student'));
+		}
+	}
+
 
 }

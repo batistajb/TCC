@@ -94,4 +94,45 @@ class EnrollController extends Controller {
 		                    ->with( 'status', 'Rematriculado com sucesso!' );
 	}
 
+
+	public function searchEnroll(Request $request){
+
+		$student    =  Student::all()
+		                      ->where('id','=',$request->students)
+		                      ->where('enroll','=',1)
+		                      ->first();
+
+		if(empty($student)){
+			return back()->with('status', 'Solicitação de matrícula não efetuada!');
+		}else{
+			return view('admin.enroll.index',compact('student'));
+		}
+	}
+
+
+	public function searchEnrollRenew(Request $request){
+
+		$student    =  Student::all()
+		                      ->where('id','=',$request->students)
+		                      ->where('enroll','=',0)
+		                      ->first();
+		if(empty($student)){
+			return back()->with('status', 'Solicitação de rematrícula não efetuada!');
+		}else{
+			return view('admin.enroll.renew',compact('student'));
+		}
+	}
+	public function searchEnrollment(Request $request){
+
+		$student    =  Student::all()
+		                      ->where('id','=',$request->students)
+		                      ->where('enroll','=',5)
+		                      ->first();
+		if(empty($student)){
+			return back()->with('status', 'Solicitação da lista de espera não efetuada!');
+		}else{
+			return view('admin.enroll.enrolment',compact('student'));
+		}
+	}
+
 }

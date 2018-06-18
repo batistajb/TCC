@@ -11,69 +11,108 @@
 @stop
 
 @section('content')
+    <hr/>
+    <h1 class="header-title">Listagem de alunos</h1>
+    <aside class="col-md-12">
+        <br/>
+    </aside>
     <div class="row">
         <div class="col-md-12">
             <div class="box-header">
-                <h1 class="box-tile">Listagem de alunos</h1>
                 <div class="col-md-4">
-                    <a href="{{route('students.create')}}" class="btn btn-success">Novo aluno(a)</a>
+                    <div class="col-md-4">
+                        @if(empty($student))
+                            <a href="{{route('students.create')}}" class="btn btn-success">Novo aluno(a)</a>
+                        @else
+                            <a href="{{route('students.index')}}" class="btn btn-success">Listar todos</a>
+                        @endif
+                    </div>
                 </div>
                 <div class="col-md-8">
+                    {!! Form::open(array('url'=>route('searchStudent')))!!}
                     <div class="input-group input-group-sm" style="width: 450px;">
-                        <input type="text" name="table_search" class="form-control pull-right" placeholder="Turmas">
+                        <select class="select-students form-control" name="students">
+                            <option></option>
+                        </select>
                         <div class="input-group-btn">
                             <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="box-default">
-                <div class="container-fluid col-md-12">
-                    <div class="container-fluid">
-                        <div class="box-body table-responsive no-padding">
-                            <table id="tInfo" class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Data de Nascimento</th>
-                                    <th>Responsável</th>
-                                    <th>Série</th>
-                                    <th>Ação</th>
-                                </tr>
-                                </thead>
+    </div>
+    <div class="row">
+        <div class="box-default">
+            <div class="container-fluid col-md-12">
+                <div class="container-fluid">
+                    <div class="box-body table-responsive no-padding">
+                        <table id="tInfo" class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Data de Nascimento</th>
+                                <th>Responsável</th>
+                                <th>Série</th>
+                                <th>Ação</th>
+                            </tr>
+                            </thead>
+                            @if(!empty($student))
                                 <tbody>
-                                @forelse($students as $student)
-                                    <tr>
-                                        <td>{{$student->name}}</td>
-                                        <td>{{$student->birth}}</td>
-                                        <td>{{$student->responsible['name_responsible']}}</td>
-                                        <td>{{$student->serie}} ºano</td>
-                                        <td>
-                                            <a href="students/{{$student->id}}/edit" class="btn btn-primary">
-                                                <i class="ion-edit"></i> Editar</a>
+                                <tr>
+                                    <td>{{$student->name}}</td>
+                                    <td>{{$student->birth}}</td>
+                                    <td>{{$student->responsible['name_responsible']}}</td>
+                                    <td>{{$student->serie}} ºano</td>
+                                    <td>
+                                        <a href="students/{{$student->id}}/edit" class="btn btn-primary">
+                                            <i class="ion-edit"></i> Editar</a>
+                                        @if($student->enroll == 6)
                                             <button type="button" class="btn btn-danger" data-toggle="modal"
                                                     data-target="#delete" data-whatever="{{$student->id}}"><i
                                                         class="ion-trash-b"></i> Excluir
                                             </button>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <th>Nenhum registro cadastrado!</th>
-                                    <th/>
-                                    <th/>
-                                    <th/>
-                                    <th/>
-                                @endforelse
+                                        @endif
+                                    </td>
+                                </tr>
                                 </tbody>
-                                {{$students->links()}}
+                        </table>
+                        @else
+                            <tbody>
+                            @forelse($students as $student)
+                                <tr>
+                                    <td>{{$student->name}}</td>
+                                    <td>{{$student->birth}}</td>
+                                    <td>{{$student->responsible['name_responsible']}}</td>
+                                    <td>{{$student->serie}} ºano</td>
+                                    <td>
+                                        <a href="students/{{$student->id}}/edit" class="btn btn-primary">
+                                            <i class="ion-edit"></i> Editar</a>
+                                        @if($student->enroll == 6)
+                                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#delete" data-whatever="{{$student->id}}"><i
+                                                        class="ion-trash-b"></i> Excluir
+                                            </button>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <th>Nenhum registro cadastrado!</th>
+                                <th/>
+                                <th/>
+                                <th/>
+                                <th/>
+                            @endforelse
+                            </tbody>
                             </table>
-                        </div>
+                            {{$students->links()}}
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <div class="modal  fade in" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -107,4 +146,20 @@
             confirm("{{session('status')}}");
         </script>
     @endif
+@stop
+
+@section('adminlte_js')
+    <script type="text/javascript">
+        /*requisição na tabela das turmas*/
+        $.get('/admin/students/select', function (students) {
+            $.each(students, function (key, value) {
+                $('select[name=students]').append('<option value=' + value.id + '>' + value.name + '</option>')
+            });
+        });
+        $('.select-students').select2({
+            placeholder: "Buscar aluno",
+            allowClear: "true",
+            minimumInputLength: 1
+        });
+    </script>
 @stop

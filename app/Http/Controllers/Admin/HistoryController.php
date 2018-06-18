@@ -35,6 +35,17 @@ class HistoryController extends Controller
 	}
 
 
+	public function oldHistory($id){
+
+		$student                       =   Student::findOrFail($id);
+		$dailies                        =   Daily::all()
+		                                         ->where('student_id','=',$student->id);
+		$school                         =   School::findOrFail(1);
+
+		return view('admin.history.show', compact('student','dailies','school'));
+	}
+
+
 	public function createHistory(){
 		$layout                         =   0;
 		$students                       =   Student::all();
@@ -118,6 +129,20 @@ class HistoryController extends Controller
 	}
 
 
+	public function searchOld(Request $request){
+
+		$student    =  Student::all()
+		                      ->where('id','=',$request->students)
+		                      ->where('enroll','=',4)
+		                      ->first();
+		if(empty($student)){
+			return back()->with('status', 'Solicitação da lista de espera não efetuada!');
+		}else{
+			return view('admin.history.old',compact('student'));
+		}
+	}
+
+
 	/**
 	 * @param Request $request
 	 *
@@ -151,7 +176,7 @@ class HistoryController extends Controller
 
 		$pdf = PDF::loadView('pdf.history',['student'=>$student,'dailies'=>$dailies,'school'=>$school,'today'=>$today]);
 
-		 return $pdf->stream($student->name.'_History_Escolar.pdf');
+		 return $pdf->stream($student->name.'_Historico_Escolar.pdf');
 	}
 
 }
