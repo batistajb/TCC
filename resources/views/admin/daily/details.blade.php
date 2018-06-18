@@ -23,9 +23,6 @@
             </div>
         </div>
     </div>
-
-    {!! Form::open(array('url'=>route('dailies.confirm'))) !!}
-
     <div class="container-fluid col-md-8">
         @include('admin.enturm.table-info')
     </div>
@@ -39,7 +36,7 @@
                     <thead>
                     <tr>
                         <th>Aluno</th>
-                        <th>Data de nasc.</th>
+                        <th>Responsável</th>
                         <th>Status</th>
                         <th>Ações</th>
                     </tr>
@@ -50,43 +47,34 @@
                         @foreach($student_team->students as $student)
                             <tr>
                                 <td>{{$student->name}}</td>
-                                <td>{{$student->birth}}</td>
+                                <td>{{$student->responsible['name_responsible']}}</td>
                                 @if($student->status == 0)
                                     <td>Em curso</td>
                                 @endif
                                 @if($student->status == 1)
-                                    <td><a style="color: red">Reprovado</a></td>
+                                    <td>Reprovado</td>
                                 @endif
                                 @if($student->status == 2)
-                                    <td><a style="color: blue">Aprovado</a></td>
+                                    <td>Aprovado</td>
                                 @endif
                                 <td>
-                                    <a href="dailies/{{$student->id}}/edit" class="btn btn-primary">
+                                    <a href="{{$student->id}}/edit" class="btn btn-primary">
                                         <i class="ion-edit"></i> Lançar</a>
                                 </td>
                             </tr>
                         @endforeach
                     @empty
-                            <th>Nenhum registro cadastrado!</th>
-                            <th/>
-                            <th/>
-                            <th/>
-                            <th/>
+                        <th>Nenhum registro cadastrado!</th>
+                        <th/>
+                        <th/>
+                        <th/>
+                        <th/>
                     @endforelse
-                    <th><hr/>
-                        <input type="hidden" value="{{$degree->year}}" name="year"/>
-                        <input type="hidden" value="{{$degree->id}}" name="degree"/>
-                        <input type="hidden" value="{{$team->id}}" name="team"/>
-                        <button type='submit' class="btn btn-success">
-                            <i class="ion-checkmark"></i>Concluir Lançamentos</button>
-                    </th>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
-    {!! Form::close() !!}
 
     @if (session('status'))
         <script>

@@ -23,7 +23,7 @@ class AdminController extends Controller
     	return view('admin.admin.index', compact('students_count','teachers_count','teams_count','teams'));
     }
 
-	public function chart(){
+	public function lineChart(){
 
     	$students = Student::all();
 		return \Response::json($students);

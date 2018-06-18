@@ -1,5 +1,6 @@
 <?php
 
+
 $this->get('/','Site\SiteController@index')->name('home');
 
 
@@ -13,7 +14,7 @@ $this->get('/','Site\SiteController@index')->name('home');
 
 		Route::get('ajax-degree/{serie}','EnturmController@degree')->name('test');//ajax
 		Route::get('ajax-team/{serie}','EnturmController@Team')->name('test');//ajax
-		Route::get('ajax-chart','AdminController@chart')->name('chart');//ajax
+		Route::get('ajax-line-chart','AdminController@lineChart')->name('lineChart');//ajax
 
 
 		/*Gerenciamneto dos históricos boletins*/
@@ -23,7 +24,9 @@ $this->get('/','Site\SiteController@index')->name('home');
 		Route::post('history/store','HistoryController@storeHistory')->name('history.store');
 		Route::get('history/old','HistoryController@old')->name('history.old');
 		Route::post('history/search','HistoryController@search')->name('history.search');
-		Route::get('bulletin','HistoryController@bulletin')->name('history.bulletin');
+
+		Route::get('bulletin','HistoryController@showBulletin')->name('bulletin');
+		Route::post('bulletin/create','HistoryController@createBulletin')->name('createBulletin');
 
 
 		/*Gerenciamneto das notas e frequencia-diário*/
@@ -69,6 +72,10 @@ $this->get('/','Site\SiteController@index')->name('home');
 		Route::post('teacher/search','TeacherController@search')->name('teacher.search');
 		Route::get('myProfile','UsersController@myProfile')->name('myProfile');
 		Route::patch('myProfile','UsersController@editProfile')->name('myProfile');
+
+		/*Gerando PDF*/
+		Route::get('bulletin/pdf', 'HistoryController@boletimPdf')->name('boletimPdf');
+		Route::get('history/pdf', 'HistoryController@historyPdf')->name('historyPdf');
 	});
 
 });

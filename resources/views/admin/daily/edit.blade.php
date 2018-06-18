@@ -43,9 +43,9 @@
                                             <td>{{$daily->note}} Pontos</td>
                                             <td>{{$daily->frequency}}%</td>
                                                 @if($daily->status == 2)
-                                                    <td>Aprovado</td>
+                                                <td><a style="color: blue">Aprovado</a></td>
                                                 @elseif($daily->status == 1)
-                                                    <td>Reprovado</td>
+                                                <td><a style="color: red">Reprovado</a></td>
                                                 @elseif($daily->status == 0)
                                                     <td>Em curso</td>
                                                 @endif
