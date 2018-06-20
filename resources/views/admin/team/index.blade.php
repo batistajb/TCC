@@ -10,28 +10,35 @@
 @endsection
 
 @section('content')
+    <hr/>
+    <h1 class="header-title">Listagem das turmas</h1>
+    <aside class="col-md-12">
+        <br/>
+    </aside>
     <div class="row">
         <div class="col-md-12">
-            <h1 class="box-tile">Listagem de Turmas</h1>
-            <hr/>
-            <div class="col-md-4">
-                @if(Request::url()=='http://'.$_SERVER['HTTP_HOST'].'/team/search')
-                    <a href="{{route('team.index')}}" class="btn btn-success">Listar todas turmas</a>
-                @else
-                    <a href="{{route('team.create')}}" class="btn btn-success">Nova turma</a>
-                @endif
-            </div>
-            <div class="col-md-8">
-                <form method="post" action="{{url('admin/team/search')}}" class="form-group">
-                    {{csrf_field()}}
+            <div class="box-header">
+                <div class="col-md-4">
+                    <div class="col-md-4">
+                        @if(empty($teams))
+                            <a href="{{route('team.create')}}" class="btn btn-success">Nova turma</a>
+                        @else
+                            <a href="{{route('team.index')}}" class="btn btn-success">Listar turmas</a>
+                        @endif
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    {!! Form::open(array('url'=>route('searchTeam')))!!}
                     <div class="input-group input-group-sm" style="width: 450px;">
-                        <input type="text" name="table_search" class="form-control pull-right"
-                               placeholder="Turmas" required="required">
+                        <select class="select-teams form-control" name="teams">
+                            <option></option>
+                        </select>
                         <div class="input-group-btn">
                             <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
-                </form>
+                    {!! Form::close() !!}
+                </div>
             </div>
         </div>
     </div>
@@ -77,8 +84,10 @@
                                 <th/>
                             @endforelse
                             </tbody>
-                            {{$teams->links()}}
                         </table>
+                        @if(empty($teams))
+                        {{$teams->links()}}
+                        @endif
                     </div>
                 </div>
             </div>
@@ -119,5 +128,22 @@
         </script>
     @endif
 
+@stop
 
+
+
+@section('adminlte_js')
+    <script type="text/javascript">
+        /*requisição na tabela das turmas*/
+        $.get('/admin/team/select', function (teams) {
+            $.each(teams, function (key, value) {
+                $('select[name=teams]').append('<option value=' + value.year + '>' + value.year + '</option>')
+            });
+        });
+        $('.select-teams').select2({
+            placeholder: "Buscar ano da turma",
+            allowClear: "true",
+            minimumInputLength: 1
+        });
+    </script>
 @stop

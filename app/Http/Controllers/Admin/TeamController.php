@@ -7,6 +7,7 @@ use App\Models\Team;
 use DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Response;
 
 class TeamController extends Controller
 {
@@ -132,11 +133,21 @@ class TeamController extends Controller
 		return \Validator::make($data,$rules,$mensagens);
 	}
 
-	public function search(Request $request){
-
-		$professor = Teacher::findOrFail($request->teacher_id);
-		$professores = Teacher::all();
-		return view('admin.users.teachers.search',compact('professor','professores'));
+	public function select(){
+		$teams    =  Team::all();
+		return Response::json( $teams );
 	}
 
+
+	public function searchTeam(Request $request){
+
+		$teams    =  Team::all()
+		                      ->where('year',    '=',$request->teams)
+		                      ->where('controll','=','0');
+		if(empty($teams)){
+			return back()->with('status', 'Turma não cadastrada!');
+		}else{
+			return view('admin.team.index',compact('teams'));
+		}
+	}
 }

@@ -12,11 +12,14 @@ $this->get('/','Site\SiteController@index')->name('home');
 	],function (){
 		Route::get('dashboard','AdminController@index')->name('dashboard');
 
+		Route::get('ajax-line-chart','AdminController@lineChart')->name('lineChart');//ajax
+		Route::get('ajax-team/{serie}','EnturmController@Team')->name('test');//ajax
 		Route::get('ajax-degree/{serie}','EnturmController@degree')->name('test');//ajax
 		Route::get('students/select','StudentsController@select')->name('students.select');//ajax
 		Route::get('teachers/select','TeacherController@select')->name('teachers.select');//ajax
-		Route::get('ajax-team/{serie}','EnturmController@Team')->name('test');//ajax
-		Route::get('ajax-line-chart','AdminController@lineChart')->name('lineChart');//ajax
+		Route::get('team/select','TeamController@select')->name('teams.select');//ajax
+		Route::get('subjects/select','SubjectsController@select')->name('subjects.select');//ajax
+		Route::get('users/select','UsersController@select')->name('users.select');//ajax
 
 
 		/*Gerenciamneto dos históricos boletins*/
@@ -84,6 +87,9 @@ $this->get('/','Site\SiteController@index')->name('home');
 		Route::post('history/searchOld','HistoryController@searchOld')->name('searchOld');
 		Route::post('students/searchStudent','StudentsController@searchStudent')->name('searchStudent');
 		Route::post('teacher/searchTeacher','TeacherController@searchTeacher')->name('searchTeacher');
+		Route::post('team/searchTeam','TeamController@searchTeam')->name('searchTeam');
+		Route::post('subjects/searchSubjects','SubjectsController@searchSubjects')->name('searchSubjects');
+		Route::post('users/searchUsers','UsersController@searchUsers')->name('searchUsers');
 	});
 
 });

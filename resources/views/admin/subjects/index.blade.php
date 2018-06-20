@@ -10,81 +10,105 @@
 @stop
 
 @section('content')
-
+    <hr/>
+    <h1 class="header-title">Listagem das Disciplinas</h1>
+    <aside class="col-md-12">
+        <br/>
+    </aside>
     <div class="row">
         <div class="col-md-12">
             <div class="box-header">
-                <h1 class="box-tile">Listagem de disciplinas</h1>
-                <hr/>
                 <div class="col-md-4">
-                    @if(Request::url()=='http://'.$_SERVER['HTTP_HOST'].'/admin/subjects/search')
-                        <a href="{{route('subjects.index')}}" class="btn btn-success">Listar todas disciplinas</a>
-                    @else
-                        <a href="{{route('subjects.create')}}" class="btn btn-success">Nova disciplina</a>
-                    @endif
+                    <div class="col-md-4">
+                        @if(empty($subject))
+                            <a href="{{route('subjects.create')}}" class="btn btn-success">Nova disciplina</a>
+                        @else
+                            <a href="{{route('subjects.index')}}" class="btn btn-success">Listar disciplinas</a>
+                        @endif
+                    </div>
                 </div>
                 <div class="col-md-8">
-                    <form method="post" action="{{url('admin/subjects/search')}}" class="form-group">
-                        {{csrf_field()}}
-                        <div class="input-group input-group-sm" style="width: 450px;">
-                            <input type="text" name="table_search" class="form-control pull-right"
-                                   placeholder="Disciplinas" required="required">
-                            <div class="input-group-btn">
-                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                            </div>
+                    {!! Form::open(array('url'=>route('searchSubjects')))!!}
+                    <div class="input-group input-group-sm" style="width: 450px;">
+                        <select class="select-subjects form-control" name="subjects">
+                            <option></option>
+                        </select>
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                         </div>
-                    </form>
+                    </div>
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="box-default">
-                <div class="container-fluid col-md-1">
+    </div>
+    <div class="row">
+        <div class="box-default">
+            <div class="container-fluid col-md-1">
 
-                </div>
-                <div class="container-fluid col-md-8">
-                    <div class="container-fluid">
-                        <div class="box-body table-responsive no-padding">
-                            <table id="tInfo" class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Carga horária</th>
-                                    <th>Ano/Série</th>
-                                    <th>Ações</th>
-                                </tr>
-                                </thead>
+            </div>
+            <div class="container-fluid col-md-8">
+                <div class="container-fluid">
+                    <div class="box-body table-responsive no-padding">
+                        <table id="tInfo" class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Carga horária</th>
+                                <th>Ano/Série</th>
+                                <th>Ações</th>
+                            </tr>
+                            </thead>
+                            @if(!empty($subject))
                                 <tbody>
-                                @forelse($subjects as $subject)
-                                    <tr>
-                                        <td>{{$subject->name}}</td>
-                                        <td>{{$subject->c_h}}</td>
-                                        <td>{{$subject->serie}}º ano</td>
-                                        <td>
-                                            <a href="subjects/{{$subject->id}}/edit" class="btn btn-primary">
-                                                <i class="ion-edit"></i> Editar</a>
-                                            <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#delete" data-whatever="{{$subject->id}}"><i
-                                                        class="ion-trash-b"></i> Excluir
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    @empty
-                                        <th>Nenhum registro cadastrado!</th>
-                                        <th/>
-                                        <th/>
-                                        <th/>
-                                        <th/>
-                                    @endforelse
+                                <tr>
+                                    <td>{{$subject->name}}</td>
+                                    <td>{{$subject->c_h}}</td>
+                                    <td>{{$subject->serie}}º ano</td>
+                                    <td>
+                                        <a href="subjects/{{$subject->id}}/edit" class="btn btn-primary">
+                                            <i class="ion-edit"></i> Editar</a>
+                                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                data-target="#delete" data-whatever="{{$subject->id}}"><i
+                                                    class="ion-trash-b"></i> Excluir
+                                        </button>
+                                    </td>
+                                </tr>
                                 </tbody>
+                        </table>
+                        @else
+                            <tbody>
+                            @forelse($subjects as $subject)
+                                <tr>
+                                    <td>{{$subject->name}}</td>
+                                    <td>{{$subject->c_h}}</td>
+                                    <td>{{$subject->serie}}º ano</td>
+                                    <td>
+                                        <a href="subjects/{{$subject->id}}/edit" class="btn btn-primary">
+                                            <i class="ion-edit"></i> Editar</a>
+                                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                data-target="#delete" data-whatever="{{$subject->id}}"><i
+                                                    class="ion-trash-b"></i> Excluir
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <th>Nenhum registro cadastrado!</th>
+                                <th/>
+                                <th/>
+                                <th/>
+                                <th/>
+                            @endforelse
+                            </tbody>
                             </table>
                             {{$subjects->links()}}
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div class="modal  fade in" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -121,3 +145,19 @@
 
 @endsection
 
+
+@section('adminlte_js')
+    <script type="text/javascript">
+        /*requisição na tabela das turmas*/
+        $.get('/admin/subjects/select', function (subjects) {
+            $.each(subjects, function (key, value) {
+                $('select[name=subjects]').append('<option value=' + value.id + '>' + value.name + '</option>')
+            });
+        });
+        $('.select-subjects').select2({
+            placeholder: "Buscar disciplinas",
+            allowClear: "true",
+            minimumInputLength: 1
+        });
+    </script>
+@stop

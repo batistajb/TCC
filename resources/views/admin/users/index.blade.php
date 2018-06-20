@@ -12,28 +12,47 @@
 @stop
 
 @section('content')
+    <hr/>
+    <h1 class="header-title">Listagem dos usuários</h1>
+    <aside class="col-md-12">
+        <br/>
+    </aside>
     <div class="row">
         <div class="col-md-12">
             <div class="box-header">
-                <h1 class="box-tile">Listagem de usuários</h1>
                 <div class="col-md-4">
-                    @can('view-enrollment')
-                        <a class="btn btn-success" href="{{route('users.create')}}">Novo Usuário <i
-                                    class="ion-person-add"></i></a>
-                    @endcan
+                    <div class="col-md-4">
+                        @if(empty($user))
+                            @can('view-enrollment')
+                                <a class="btn btn-success" href="{{route('users.create')}}">Novo Usuário <i
+                                            class="ion-person-add"></i></a>
+                            @endcan
+                        @else
+                            <a href="{{route('subjects.index')}}" class="btn btn-success">Listar todos usuários</a>
+                        @endif
+                    </div>
                 </div>
                 <div class="col-md-8">
+                    {!! Form::open(array('url'=>route('searchUsers')))!!}
                     <div class="input-group input-group-sm" style="width: 450px;">
-                        <input type="text" name="table_search" class="form-control pull-right" placeholder="Usuários">
+                        <select class="select-users form-control" name="users">
+                            <option></option>
+                        </select>
                         <div class="input-group-btn">
                             <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="container-fluid col-md-12">
+    </div>
+    <div class="row">
+        <div class="box-default">
+            <div class="container-fluid col-md-1">
+
+            </div>
+            <div class="container-fluid col-md-8">
                 <div class="container-fluid">
                     <div class="box-body table-responsive no-padding">
                         <table id="tInfo" class="table table-hover">
@@ -44,7 +63,7 @@
                                 <th>Email</th>
                                 <th>Ações</th>
                             </tr>
-                            @forelse($users as $user)
+                            @if(!empty($user))
                                 <tr>
                                     <td>{{$user->id}}</td>
                                     <td>{{$user->name}}</td>
@@ -62,16 +81,36 @@
                                         <td>Usuário não autorizado</td>
                                     @endcan
                                 </tr>
-                            @empty
-                                <th>Nenhum registro cadastrado!</th>
-                                <th/>
-                                <th/>
-                                <th/>
-                                <th/>
-                            @endforelse
-                            </tbody>
-                        </table>
-                        {{ $users->links() }}
+                            @else
+                                @forelse($users as $user)
+                                    <tr>
+                                        <td>{{$user->id}}</td>
+                                        <td>{{$user->name}}</td>
+                                        <td>{{$user->email}}</td>
+                                        @can('view-enrollment')
+                                            <td>
+                                                <a href="users/{{$user->id}}/edit" class="btn btn-primary">
+                                                    <i class="ion-edit"></i> Editar</a>
+                                                <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                        data-target="#delete" data-whatever="{{$user->id}}"><i
+                                                            class="ion-trash-b"></i> Excluir
+                                                </button>
+                                            </td>
+                                        @else
+                                            <td>Usuário não autorizado</td>
+                                        @endcan
+                                    </tr>
+                                @empty
+                                    <th>Nenhum registro cadastrado!</th>
+                                    <th/>
+                                    <th/>
+                                    <th/>
+                                    <th/>
+                                @endforelse
+                                </tbody>
+                            </table>
+                            {{ $users->links() }}
+                        @endif
                     </div>
                 </div>
             </div>
@@ -109,4 +148,21 @@
             confirm("{{session('status')}}");
         </script>
     @endif
+@stop
+
+
+@section('adminlte_js')
+    <script type="text/javascript">
+        /*requisição na tabela das turmas*/
+        $.get('/admin/users/select', function (users) {
+            $.each(users, function (key, value) {
+                $('select[name=users]').append('<option value=' + value.id + '>' + value.name + '</option>')
+            });
+        });
+        $('.select-users').select2({
+            placeholder: "Buscar usuário",
+            allowClear: "true",
+            minimumInputLength: 1
+        });
+    </script>
 @stop

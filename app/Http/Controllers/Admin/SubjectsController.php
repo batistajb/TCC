@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Response;
 
 class SubjectsController extends Controller
 {
@@ -91,8 +92,23 @@ class SubjectsController extends Controller
 		return \Validator::make($data,$rules,$mensagens);
 	}
 
-	public function search(Request $request){
-		$subjects = Subject::search($request->table_search);
-		return view('admin.subjects.index',compact('subjects'));
+
+	public function select(){
+		$subjects    =  Subject::all();
+		return Response::json( $subjects );
+	}
+
+
+	public function searchSubjects(Request $request){
+
+
+		$subject    =  Subject::paginate(15)
+		                 ->where('id','=',$request->subjects)->first();
+
+		if(empty($subject)){
+			return back()->with('status', 'Disciplina não cadastrada!');
+		}else{
+			return view('admin.subjects.index', compact('subject'));
+		}
 	}
 }
