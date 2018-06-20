@@ -28,7 +28,7 @@
                                             class="ion-person-add"></i></a>
                             @endcan
                         @else
-                            <a href="{{route('subjects.index')}}" class="btn btn-success">Listar todos usuários</a>
+                            <a href="{{route('users.index')}}" class="btn btn-success">Listar todos usuários</a>
                         @endif
                     </div>
                 </div>
