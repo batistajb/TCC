@@ -8,7 +8,6 @@
                         <tr>
                             <th>Nome:</th>
                             <th>Série:</th>
-                            <th>Coeficiente:</th>
                             <th>Responsável:</th>
                             <th>Ação</th>
                         </tr>
@@ -18,7 +17,6 @@
                             <tr>
                                 <td>{{$student->name}}</td>
                                 <td>{{$student->serie}}º ano</td>
-                                <td>{{$student->id}}</td>
                                 <td>{{$student->responsible['name_responsible']}}</td>
                                 <td>
                                     <button type="button" class="btn btn-danger" data-toggle="modal"

@@ -13,7 +13,7 @@ class SubjectsController extends Controller
 
 	public function index()
 	{
-		$subjects = Subject::paginate(10);
+		$subjects = Subject::paginate(7);
 		return view('admin.subjects.index',compact('subjects'))->with('search', '');
 	}
 
@@ -95,6 +95,11 @@ class SubjectsController extends Controller
 
 	public function select(){
 		$subjects    =  Subject::all();
+		return Response::json( $subjects );
+	}
+
+	public function search($series){
+		$subjects    =  Subject::all()->where('serie','=',$series);
 		return Response::json( $subjects );
 	}
 

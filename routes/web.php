@@ -20,6 +20,7 @@ $this->get('/','Site\SiteController@index')->name('home');
 		Route::get('team/select','TeamController@select')->name('teams.select');//ajax
 		Route::get('subjects/select','SubjectsController@select')->name('subjects.select');//ajax
 		Route::get('users/select','UsersController@select')->name('users.select');//ajax
+		Route::get('ajax-subjects/{series}','SubjectsController@search')->name('subjects.search');//ajax
 
 
 		/*Gerenciamneto dos históricos boletins*/

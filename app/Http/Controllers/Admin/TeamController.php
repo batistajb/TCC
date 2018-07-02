@@ -141,10 +141,11 @@ class TeamController extends Controller
 
 	public function searchTeam(Request $request){
 
-		$teams    =  Team::all()
-		                      ->where('year',    '=',$request->teams)
-		                      ->where('controll','=','0');
-		if(empty($teams)){
+		$teams    =  Team::where('year',    '=',$request->teams)
+		                        ->where('controll','=','0')
+		                        ->paginate(10);
+
+		if(!empty($teams->teacher)){
 			return back()->with('status', 'Turma não cadastrada!');
 		}else{
 			return view('admin.team.index',compact('teams'));

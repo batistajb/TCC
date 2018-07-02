@@ -79,15 +79,16 @@ class EnrollController extends Controller {
 		$student_id         =   $id;
 		$student            =   Student::findOrFail($student_id);
 
+		If($student->serie >5){
+			return redirect()   ->back()
+			                    ->with( 'status', 'Atenção! Série/Ano não disponivel pela instituição.' );
+		}
 		If($student->status == 0){
 			return redirect()   ->back()
 			                    ->with( 'status', 'Atenção! Aluno em curso. Finalize as notas e presenças.' );
-		}elseif ($student->status == 1){
+		}else{
 			$student->enroll = 2;
-			$student->save();
-		}elseif ($student->status == 2){
-			$student->enroll = 2;
-			$student->serie ++;
+			$student->status = 0;
 			$student->save();
 		}
 		return redirect()   ->back()

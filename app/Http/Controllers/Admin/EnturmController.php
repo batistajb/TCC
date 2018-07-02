@@ -33,22 +33,64 @@ class EnturmController extends Controller {
 	 */
 	public function archive( Request $request ) {
 		/*return $request;*/
-
+		$cont    = 0;
 		$team_id = $request->team_id;
 		$team    = Team::findOrFail( $team_id );
+		$degrees = Degree::all();
 
-		if($team->controll == 2){
+		if ( $team->controll == 2 ) {
 			foreach ( $team->studentTeams as $student_team ) {
 				foreach ( $student_team->students as $student ) {
-					$student->enroll = 0;
-					$student->serie  = $student->serie + 1;
-					$student->degree_id  = 0;
-					$student->save();
+					foreach ( $student_team->degrees as $_degree ) {
+						foreach ( $degrees as $degree ) {
+
+							if ( ( $degree->year == $_degree->year + 1 ) && ( $degree->series == $_degree->series + 1 ) ) {
+								$cont = 2;
+							} elseif ( ( $degree->year == $_degree->year + 1 ) && ( $degree->series == $_degree->series ) ) {
+								$cont = 1;
+							} elseif ( ( $student->status == 2 ) && ( $student->serie == 5 ) ) {
+								$cont = 3;
+							}else {
+								$cont = 0;
+							}
+
+							if ( $cont == 1 ) {
+								if ( $student->status == 1 ) {
+									$student->serie;
+									$student->enroll    = 0;
+									$student->status    = 1;
+									$student->degree_id = $degree->id;
+									$student->save();
+								}
+							}
+							if ( $cont == 2 ) {
+								if ( ( $student->status == 2 ) ) {
+									$student->serie ++;
+									$student->enroll    = 0;
+									$student->status    = 2;
+									$student->degree_id = $degree->id;
+									$student->save();
+								}
+							}
+							if ( $cont == 3 ) {
+								$student->enroll = 0;
+								$student->status = 2;
+								$student->save();
+								echo $student->id . "Aprovado" . "<br/>";
+								echo $_degree->series . "serie" . "<br/>";
+							}
+						}
+					}
 				}
 			}
-			$team->delete();
-			return back()->with( 'status', 'Registro arquivado com sucesso!' );
-		}else{
+			if ( ( $cont == 1 ) || ( $cont == 2 )||($cont == 3) ) {
+				$team->delete();
+				return back()->with( 'status', 'Registro arquivado com sucesso!' );
+			}
+			if ( $cont == 0 ) {
+				return back()->with( 'status', 'Não existem turma ou grade escolar para a série do próximo ano!' );
+			}
+		} else {
 			return back()->with( 'status', 'Atenção! Realize o fechamento dos diários da turma!' );
 		}
 

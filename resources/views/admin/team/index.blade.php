@@ -20,11 +20,7 @@
             <div class="box-header">
                 <div class="col-md-4">
                     <div class="col-md-4">
-                        @if(empty($teams))
-                            <a href="{{route('team.create')}}" class="btn btn-success">Nova turma</a>
-                        @else
-                            <a href="{{route('team.index')}}" class="btn btn-success">Listar turmas</a>
-                        @endif
+                        <a href="{{route('team.create')}}" class="btn btn-success">Nova turma</a>
                     </div>
                 </div>
                 <div class="col-md-8">
@@ -85,9 +81,9 @@
                             @endforelse
                             </tbody>
                         </table>
-                        @if(empty($teams))
+
                         {{$teams->links()}}
-                        @endif
+
                     </div>
                 </div>
             </div>
@@ -143,7 +139,6 @@
         $('.select-teams').select2({
             placeholder: "Buscar ano da turma",
             allowClear: "true",
-            minimumInputLength: 1
         });
     </script>
 @stop

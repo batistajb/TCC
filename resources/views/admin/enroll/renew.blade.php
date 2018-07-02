@@ -63,11 +63,10 @@
                                     <td>{{$student->name}}</td>
                                     @if($student->status == 1)
                                         <td>Reprovado</td>
-                                        <td>{{$student->serie}}º ano</td>
                                     @else
                                         <td>Aprovado</td>
-                                        <td>{{$student->serie+1}}º ano</td>
                                     @endif
+                                    <td>{{$student->serie}}º ano</td>
                                     @can('view-enrollment')
                                         <td>
                                             <button type="button" class="btn btn-warning" data-toggle="modal"
@@ -88,11 +87,10 @@
                                     <td>{{$student->name}}</td>
                                     @if($student->status == 1)
                                         <td>Reprovado</td>
-                                        <td>{{$student->serie}}º ano</td>
                                     @else
                                         <td>Aprovado</td>
-                                        <td>{{$student->serie+1}}º ano</td>
                                     @endif
+                                    <td>{{$student->serie}}º ano</td>
                                     @can('view-enrollment')
                                         <td>
                                             <button type="button" class="btn btn-warning" data-toggle="modal"

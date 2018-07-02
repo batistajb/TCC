@@ -45,7 +45,7 @@
                 <div class="container-fluid col-md-1">
 
                 </div>
-                <div class="container-fluid col-md-8">
+                <div class="container-fluid col-md-10">
                     <div class="container-fluid">
                         <table id="tInfo" class="table table-striped table-bordered fixed">
                             <thead>

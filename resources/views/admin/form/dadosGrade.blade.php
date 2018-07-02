@@ -8,7 +8,7 @@
 </div>
 
 <div class="form-group col-md-3 {{$errors->has('series') ? 'has-error': ''}}">
-    <select class="select-turmas form-control" name="series">
+    <select class="select-team form-control" name="series">
             <option></option>
             <option value="1">1º Ano</option>
             <option value="2">2º Ano</option>
@@ -24,11 +24,8 @@
 </div>
 
 <div class="form-group col-md-4 {{$errors->has('subject_id') ? 'has-error': ''}}">
-    <select class="select-disciplinas form-control" name="subject_id[]" multiple="multiple">
+    <select class="select-subjects form-control" name="subject_id[]" id="subject_id" multiple="multiple">
             <option></option>
-        @foreach($subjects as $subject)
-            <option value="{{$subject->id}}">{{$subject->name}}</option>
-        @endforeach
     </select>
     @if($errors->has('subject_id'))
         <span class="help-block">

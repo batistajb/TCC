@@ -30,3 +30,27 @@
         </div>
     </div>
 @stop
+@section('adminlte_js')
+<script type="text/javascript">
+    $('select[name=series]').change(function () {
+        var serie = $(this).val();
+        console.log(serie);
+        /*requisição na tabela das turmas*/
+        $.get('/admin/ajax-subjects/' + serie, function (subjects) {
+            $('select[id=subject_id').empty();
+            $.each(subjects, function (key, value) {
+                $('select[id=subject_id').append('<option value=' + value.id + '>' + value.name + '</option>')
+            });
+        });
+    });
+
+    $('.select-team').select2({
+        placeholder: "Séries",
+        allowClear:"true"
+    });
+    $('.select-subjects').select2({
+        placeholder: "Disciplinas",
+        allowClear:"true"
+    });
+    </script>
+@endsection
